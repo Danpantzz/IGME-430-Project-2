@@ -2,19 +2,93 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const DrawCanvas = (props) => {
-    return (
-        <canvas id="myCanvas" width={window.innerWidth * .5} height={window.innerHeight * .8}></canvas>
-    );
+const socket = io();
+
+var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+var x = "black",
+    y = 2;
+
+const handleDraw = (c, e) => {
+    // send data to socket so all users see the drawing
+    canvas = document.getElementById('myCanvas');
+    ctx = canvas.getContext('2d');
+
+    canvas.addEventListener("mousemove", function (e) {
+        findxy('move', ctx, e)
+    }, false);
+    canvas.addEventListener("mousedown", function (e) {
+        findxy('down', ctx, e)
+    }, false);
+    canvas.addEventListener("mouseup", function (e) {
+        findxy('up', ctx, e)
+    }, false);
+    canvas.addEventListener("mouseout", function (e) {
+        findxy('out', ctx, e)
+    }, false);
 }
 
-const drawPlayer = () => {
-    const canvas = document.getElementById('myCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, 20, 0, 2 * Math.PI);
-    ctx.stroke();
+const findxy = (res, ctx, e) => {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
 
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = x;
+            ctx.fillRect(currX, currY, 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+    }
+    if (res == 'up' || res == "out") {
+        flag = false;
+    }
+    if (res == 'move') {
+        if (flag) {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvas.offsetLeft;
+            currY = e.clientY - canvas.offsetTop;
+            draw(ctx);
+        }
+    }
+}
+
+const draw = (ctx) => {
+    ctx.save()
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = x;
+    ctx.lineWidth = y;
+    ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
+    
+    socket.emit('draw', prevX, prevY, currX, currY, x, y);
+}
+
+const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
+    // display the drawing to users who are not the ones drawing (because it is already there for them)
+    ctx.save()
+    ctx.beginPath();
+    ctx.moveTo(_prevX, _prevY);
+    ctx.lineTo(_currX, _currY);
+    ctx.strokeStyle = _x;
+    ctx.lineWidth = _y;
+    ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
 }
 
 const handleChangePassword = (e) => {
@@ -70,13 +144,17 @@ const ChangePasswordWindow = (props) => {
 }
 
 const changeCanvasSize = () => {
-    let canvas = document.getElementById('myCanvas');
+    //let canvas = document.getElementById('myCanvas');
     canvas.width = window.innerWidth * .5;
     canvas.height = window.innerHeight * .8;
 }
 
 const init = () => {
+    canvas = document.getElementById('myCanvas');
     const changePasswordButton = document.getElementById('changePassword');
+
+    // canvas.width = window.innerWidth * .5;
+    // canvas.height = window.innerHeight * .8;
 
     changePasswordButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -87,14 +165,12 @@ const init = () => {
         return false;
     });
 
-    ReactDOM.render(
-        <DrawCanvas />,
-        document.getElementById('canvasContainer')
-    );
 
-    drawPlayer();
+    handleDraw();
+    // handleDraw();
+    socket.on('draw', displayDrawing);
 
 }
 
 window.onload = init;
-window.onresize = changeCanvasSize;
+// window.onresize = changeCanvasSize;

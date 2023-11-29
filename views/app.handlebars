@@ -11,15 +11,17 @@
     <div class="navlink"><a id="changePassword" href="/changePassword">Change Password</a></div>
   </nav>
 
-  <section id="canvasContainer">
+  <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;">
 
-  </section>
+  </canvas>
 
   <div id="domoMessage" class='hidden'>
     <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
     <h3><span id="errorMessage"></span></h3>
     <img id="domo" src="assets/img/domo.png" alt="domo"/>
   </div>
+
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/assets/appBundle.js"></script>
 </body>
 </html>
