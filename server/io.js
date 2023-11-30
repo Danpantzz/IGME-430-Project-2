@@ -5,7 +5,7 @@ let io;
 
 const handleRoomChange = (socket, roomName) => {
     socket.rooms.forEach(room => {
-        if (room == socket.id) return;
+        if (room === socket.id) return;
         socket.leave(room);
     });
     socket.join(roomName);
@@ -14,7 +14,7 @@ const handleRoomChange = (socket, roomName) => {
 
 const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
-        if (room == socket.id) return;
+        if (room === socket.id) return;
 
         io.to(room).emit('draw', prevX, prevY, currX, currY, x, y);
     })
