@@ -95,19 +95,8 @@ const handleChatMessage = () => {
         e.preventDefault();
 
         if (editBox.value) {
-            const response = await fetch('/getUsername', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const result = await response.json();
-
-            if (result.error) {
-                return false;
-            }
-
-            socket.emit('chat message', editBox.value, result);
+            let username = await handleGetUsername();
+            socket.emit('chat message', editBox.value, username);
             editBox.value = '';
         }
 
@@ -137,6 +126,21 @@ const handleChangePassword = (e) => {
     helper.sendPost(e.target.action, { username, currpass, pass, pass2 });
 
     return false;
+}
+
+const handleGetUsername = async () => {
+    const response = await fetch('/getUsername', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const result = await response.json();
+
+    if (result.error) {
+        return false;
+    }
+    return result.username;
 }
 
 // Socket.io displays ~~~~~~~~~~~~~~~~~~~~
@@ -270,11 +274,10 @@ const init = () => {
 
     const channelForm = document.getElementById('channelForm');
 
-    channelForm.addEventListener('submit', (e) => {
+    channelForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const channelSelect = document.getElementById('channelSelect');
-        socket.emit('room selected', channelSelect.value);
 
         ReactDOM.render(
             <CanvasWindow />,
@@ -284,6 +287,8 @@ const init = () => {
             <ChatWindow />,
             document.getElementById('app')
         );
+        let username = await handleGetUsername();
+        socket.emit('room selected', channelSelect.value, username);
         handleChatMessage();
     });
 

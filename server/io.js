@@ -3,13 +3,13 @@ const { Server } = require('socket.io');
 
 let io;
 
-const handleRoomChange = (socket, roomName) => {
+const handleRoomChange = (socket, roomName, username) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
         socket.leave(room);
     });
     socket.join(roomName);
-    console.log(roomName);
+    io.to(roomName).emit('chat message', 'Has joined!', username);
 }
 
 const handleChatMessage = (socket, msg, username) => {
@@ -40,8 +40,8 @@ const socketSetup = (app) => {
             console.log('a user disconnected');
         });
 
-        socket.on('room selected', (room) => handleRoomChange(socket, room));
-        socket.on('chat message', (msg, result) => handleChatMessage(socket, msg, result.username));
+        socket.on('room selected', (room, username) => handleRoomChange(socket, room, username));
+        socket.on('chat message', (msg, username) => handleChatMessage(socket, msg, username));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
     });
 
