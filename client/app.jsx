@@ -8,6 +8,8 @@ const socket = io();
 // https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
 
 var canvas, ctx;
+var x = "black",
+    y = 2;
 
 // Handlers ~~~~~~~~~~~~~~~~~~~
 
@@ -21,9 +23,6 @@ const handleDraw = (c, e) => {
         prevY = 0,
         currY = 0,
         dot_flag = false;
-
-    var x = "black",
-        y = 2;
 
     const findxy = (res, ctx, e) => {
         if (res == 'down') {
@@ -82,6 +81,11 @@ const handleDraw = (c, e) => {
     canvas.addEventListener("mouseout", function (e) {
         findxy('out', ctx, e)
     }, false);
+}
+
+const handleChangeColor = (color) => {
+    console.log('here');
+    x = color;
 }
 
 const handleChangePassword = (e) => {
@@ -181,8 +185,13 @@ const CanvasWindow = (props) => {
 
     return (
         // div for canvasControls
-        <div>
-
+        <div id="colorsDiv">
+            <button id="green" onClick={() => handleChangeColor("green")}></button>
+            <button id="blue" onClick={() => handleChangeColor("blue")}></button>
+            <button id="red" onClick={() => handleChangeColor("red")}></button>
+            <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
+            <button id="orange" onClick={() => handleChangeColor("orange")}></button>
+            <button id="black" onClick={() => handleChangeColor("black")}></button>
         </div>
     )
 }

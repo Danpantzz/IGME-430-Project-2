@@ -16,6 +16,60 @@ body {
   margin: auto;
 }
 
+#green {
+  position: absolute;
+  top: 15%;
+  left: 45%;
+  width: 10px;
+  height: 10px;
+  background: green;
+}
+
+#blue {
+  position: absolute;
+  top: 15%;
+  left: 46%;
+  width: 10px;
+  height: 10px;
+  background: blue;
+}
+
+#red {
+  position: absolute;
+  top: 15%;
+  left: 47%;
+  width: 10px;
+  height: 10px;
+  background: red;
+}
+
+#yellow {
+  position: absolute;
+  top: 17%;
+  left: 45%;
+  width: 10px;
+  height: 10px;
+  background: yellow;
+}
+
+#orange {
+  position: absolute;
+  top: 17%;
+  left: 46%;
+  width: 10px;
+  height: 10px;
+  background: orange;
+}
+
+#black {
+  position: absolute;
+  top: 17%;
+  left: 47%;
+  width: 10px;
+  height: 10px;
+  background: black;
+}
+
 #logo {
   height: 40px;
   width: 40;
