@@ -1,27 +1,35 @@
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <title>Project 2</title>
-  <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/main.css"/>
+  <link rel="shortcut icon" href="/assets/img/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="/assets/main.css" />
 </head>
+
 <body>
-  <nav><a href="/login"><img id="logo" src="" alt="app logo"/></a>
+  <nav><a href="/login"><img id="logo" src="" alt="app logo" /></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
+    <div class="navlink"><a href="/editAvatar">Change Avatar</a></div>
     <div class="navlink"><a id="changePassword" href="/changePassword">Change Password</a></div>
   </nav>
 
-  <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;">
+  <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;" hidden>
 
   </canvas>
 
+  <section id="canvasControls"></section>
+
+  <section id="app"></section>
+
   <div id="domoMessage" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <img id="speech" src="/assets/img/speech.png" alt="speech box" />
     <h3><span id="errorMessage"></span></h3>
-    <img id="domo" src="assets/img/domo.png" alt="domo"/>
+    <img id="domo" src="assets/img/domo.png" alt="domo" />
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/assets/appBundle.js"></script>
 </body>
+
 </html>
