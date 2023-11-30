@@ -12,6 +12,14 @@ const handleRoomChange = (socket, roomName) => {
     console.log(roomName);
 }
 
+const handleChatMessage = (socket, msg, username) => {
+    socket.rooms.forEach(room => {
+        if (room === socket.id) return;
+
+        io.to(room).emit('chat message', msg, username);
+    });
+}
+
 const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -32,8 +40,8 @@ const socketSetup = (app) => {
             console.log('a user disconnected');
         });
 
-        // socket.on('chat message', (msg) => handleChatMessage(socket, msg));
         socket.on('room selected', (room) => handleRoomChange(socket, room));
+        socket.on('chat message', (msg, result) => handleChatMessage(socket, msg, result.username));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
     });
 

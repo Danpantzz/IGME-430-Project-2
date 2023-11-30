@@ -84,8 +84,35 @@ const handleDraw = (c, e) => {
 }
 
 const handleChangeColor = (color) => {
-    console.log('here');
     x = color;
+}
+
+const handleChatMessage = () => {
+    const chatForm = document.getElementById('chatForm');
+    const editBox = document.getElementById('editBox');
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (editBox.value) {
+            const response = await fetch('/getUsername', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const result = await response.json();
+
+            if (result.error) {
+                return false;
+            }
+
+            socket.emit('chat message', editBox.value, result);
+            editBox.value = '';
+        }
+
+        return false;
+    })
 }
 
 const handleChangePassword = (e) => {
@@ -113,6 +140,12 @@ const handleChangePassword = (e) => {
 }
 
 // Socket.io displays ~~~~~~~~~~~~~~~~~~~~
+
+const displayMessage = (msg, username) => {
+    const messageDiv = document.createElement('div');
+    messageDiv.innerText = `${username}: ${msg}`;
+    document.getElementById('messages').appendChild(messageDiv);
+}
 
 const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     // display the drawing to users who are not the ones drawing (because it is already there for them)
@@ -198,7 +231,15 @@ const CanvasWindow = (props) => {
 
 // window for the chat room
 const ChatWindow = (props) => {
-
+    return (
+        <div id="chatDiv">
+            <div id="messages"></div>
+            <form id="chatForm">
+                <input id="editBox" type="text" />
+                <input type="submit" />
+            </form>
+        </div>
+    )
 }
 
 
@@ -235,7 +276,6 @@ const init = () => {
         const channelSelect = document.getElementById('channelSelect');
         socket.emit('room selected', channelSelect.value);
 
-        document.getElementById('app').remove();
         ReactDOM.render(
             <CanvasWindow />,
             document.getElementById('canvasControls')
@@ -244,11 +284,12 @@ const init = () => {
             <ChatWindow />,
             document.getElementById('app')
         );
-
+        handleChatMessage();
     });
 
 
     handleDraw();
+    socket.on('chat message', displayMessage);
     socket.on('draw', displayDrawing);
 
 }
