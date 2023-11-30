@@ -1,6 +1,6 @@
-const models = require('../models');
+//const models = require('../models');
 
-const { Domo } = models;
+//const { Domo } = models;
 
 const makerPage = async (req, res) => res.render('app');
 
