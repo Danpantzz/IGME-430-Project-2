@@ -18,10 +18,35 @@ body {
     // border:1px solid #000000;
 }
 
-#canvasControls {
-    
+#app {
+    //display: flex;
 }
 
+#canvasControls {
+
+}
+
+#channelForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    height: 2em;
+}
+
+#chatForm {
+    display: flex;
+    align-items: center;
+}
+
+
+// Temporary styles
+#clear {
+    position: absolute;
+    top: 15%;
+    left: 48%;
+}
+ 
 #green {
     position: absolute;
     top: 15%;

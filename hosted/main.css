@@ -16,6 +16,25 @@ body {
   margin: auto;
 }
 
+#channelForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  height: 2em;
+}
+
+#chatForm {
+  display: flex;
+  align-items: center;
+}
+
+#clear {
+  position: absolute;
+  top: 15%;
+  left: 48%;
+}
+
 #green {
   position: absolute;
   top: 15%;

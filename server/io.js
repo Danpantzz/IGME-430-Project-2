@@ -28,6 +28,14 @@ const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     })
 }
 
+const handleClearCanvas = (socket) => {
+    socket.rooms.forEach(room => {
+        if (room === socket.id) return;
+
+        io.to(room).emit('clear canvas');
+    })
+}
+
 const socketSetup = (app) => {
     const server = http.createServer(app);
     io = new Server(server);
@@ -43,6 +51,7 @@ const socketSetup = (app) => {
         socket.on('room selected', (room, username) => handleRoomChange(socket, room, username));
         socket.on('chat message', (msg, username) => handleChatMessage(socket, msg, username));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
+        socket.on('clear canvas', () => handleClearCanvas(socket));
     });
 
     return server;

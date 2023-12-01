@@ -143,7 +143,7 @@ const handleGetUsername = async () => {
     return result.username;
 }
 
-// Socket.io displays ~~~~~~~~~~~~~~~~~~~~
+// Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
 
 const displayMessage = (msg, username) => {
     const messageDiv = document.createElement('div');
@@ -162,6 +162,10 @@ const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
+}
+
+const clearCanvas = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // Windows ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,13 +226,19 @@ const CanvasWindow = (props) => {
 
     return (
         // div for canvasControls
-        <div id="colorsDiv">
-            <button id="green" onClick={() => handleChangeColor("green")}></button>
-            <button id="blue" onClick={() => handleChangeColor("blue")}></button>
-            <button id="red" onClick={() => handleChangeColor("red")}></button>
-            <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
-            <button id="orange" onClick={() => handleChangeColor("orange")}></button>
-            <button id="black" onClick={() => handleChangeColor("black")}></button>
+        <div id='controlsDiv'>
+            <div id="colorsDiv">
+                <button id="green" onClick={() => handleChangeColor("green")}></button>
+                <button id="blue" onClick={() => handleChangeColor("blue")}></button>
+                <button id="red" onClick={() => handleChangeColor("red")}></button>
+                <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
+                <button id="orange" onClick={() => handleChangeColor("orange")}></button>
+                <button id="black" onClick={() => handleChangeColor("black")}></button>
+            </div>
+            <button id='clear' onClick={() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                socket.emit('clear canvas');
+            }}>Clear</button>
         </div>
     )
 }
@@ -269,7 +279,7 @@ const init = () => {
 
     ReactDOM.render(
         <MainWindow />,
-        document.getElementById('app')
+        document.getElementById('userControls')
     );
 
     const channelForm = document.getElementById('channelForm');
@@ -285,7 +295,7 @@ const init = () => {
         );
         ReactDOM.render(
             <ChatWindow />,
-            document.getElementById('app')
+            document.getElementById('userControls')
         );
         let username = await handleGetUsername();
         socket.emit('room selected', channelSelect.value, username);
@@ -296,6 +306,7 @@ const init = () => {
     handleDraw();
     socket.on('chat message', displayMessage);
     socket.on('draw', displayDrawing);
+    socket.on('clear canvas', clearCanvas);
 
 }
 
