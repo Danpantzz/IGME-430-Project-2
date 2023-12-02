@@ -24,7 +24,7 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/app' });
   });
 };
 
@@ -46,7 +46,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/app' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -57,7 +57,7 @@ const signup = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  const username = `${req.body.username}`;
+  const username = `${req.session.account.username}`;
   const currpass = `${req.body.currpass}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
@@ -80,7 +80,7 @@ const changePassword = async (req, res) => {
       const acc = account;
       acc.password = hash;
       await acc.save();
-      return res.json({ redirect: '/maker' });
+      return res.json({ redirect: '/app' });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: 'An error occured!' });

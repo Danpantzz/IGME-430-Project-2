@@ -7,99 +7,108 @@ body {
     overflow-x: hidden;
 }
 
-// https://stackoverflow.com/questions/1152203/centering-a-canvas
-#myCanvas {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    // border:1px solid #000000;
+#title {
+    text-align: center;
 }
 
 #app {
     //display: flex;
+    overflow: auto;
+
+    // https://stackoverflow.com/questions/1152203/centering-a-canvas
+    #myCanvas {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        // border:1px solid #000000;
+    }
+
+    #canvasControls {
+        display: flex;
+
+        // Temporary styles
+        #clear {
+            position: absolute;
+            top: 15%;
+            left: 48%;
+        }
+
+        #green {
+            position: absolute;
+            top: 15%;
+            left: 45%;
+            width: 10px;
+            height: 10px;
+            background: green;
+        }
+
+        #blue {
+            position: absolute;
+            top: 15%;
+            left: 46%;
+            width: 10px;
+            height: 10px;
+            background: blue;
+        }
+
+        #red {
+            position: absolute;
+            top: 15%;
+            left: 47%;
+            width: 10px;
+            height: 10px;
+            background: red;
+        }
+
+        #yellow {
+            position: absolute;
+            top: 17%;
+            left: 45%;
+            width: 10px;
+            height: 10px;
+            background: yellow;
+        }
+
+        #orange {
+            position: absolute;
+            top: 17%;
+            left: 46%;
+            width: 10px;
+            height: 10px;
+            background: orange;
+        }
+
+        #black {
+            position: absolute;
+            top: 17%;
+            left: 47%;
+            width: 10px;
+            height: 10px;
+            background: black;
+        }
+    }
+
+    #userControls {
+        #channelForm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+            height: 2em;
+        }
+
+        #chatForm {
+            // display: flex;
+            // flex-direction: column;
+            // align-items: end;
+            //border: 1px solid #000000;
+        }
+    }
 }
 
-#canvasControls {
-
-}
-
-#channelForm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: auto;
-    height: 2em;
-}
-
-#chatForm {
-    display: flex;
-    align-items: center;
-}
-
-
-// Temporary styles
-#clear {
-    position: absolute;
-    top: 15%;
-    left: 48%;
-}
- 
-#green {
-    position: absolute;
-    top: 15%;
-    left: 45%;
-    width: 10px;
-    height: 10px;
-    background: green;
-}
-
-#blue {
-    position: absolute;
-    top: 15%;
-    left: 46%;
-    width: 10px;
-    height: 10px;
-    background: blue;
-}
-
-#red {
-    position: absolute;
-    top: 15%;
-    left: 47%;
-    width: 10px;
-    height: 10px;
-    background: red;
-}
-
-#yellow {
-    position: absolute;
-    top: 17%;
-    left: 45%;
-    width: 10px;
-    height: 10px;
-    background: yellow;
-}
-
-#orange {
-    position: absolute;
-    top: 17%;
-    left: 46%;
-    width: 10px;
-    height: 10px;
-    background: orange;
-}
-
-#black {
-    position: absolute;
-    top: 17%;
-    left: 47%;
-    width: 10px;
-    height: 10px;
-    background: black;
-}
 
 #logo {
     height: 40px;

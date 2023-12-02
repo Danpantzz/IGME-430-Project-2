@@ -2,7 +2,7 @@
 
 //const { Domo } = models;
 
-const makerPage = async (req, res) => res.render('app');
+const appPage = async (req, res) => res.render('app');
 
 // const makeDomo = async (req, res) => {
 //   if (!req.body.name || !req.body.age || !req.body.level) {
@@ -42,7 +42,7 @@ const makerPage = async (req, res) => res.render('app');
 // };
 
 module.exports = {
-  makerPage,
+  appPage,
   //makeDomo,
   //getDomos,
 };

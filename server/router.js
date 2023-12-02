@@ -13,7 +13,7 @@ const router = (app) => {
 
   app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
 
-  app.get('/maker', mid.requiresLogin, controllers.Main.makerPage);
+  app.get('/app', mid.requiresLogin, controllers.Main.appPage);
   //app.post('/maker', mid.requiresLogin, controllers.Main.makeDomo);
 
   app.get('/getUsername', mid.requiresLogin, controllers.Account.getUsername);

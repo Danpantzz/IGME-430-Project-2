@@ -13,6 +13,7 @@ var x = "black",
 
 // Handlers ~~~~~~~~~~~~~~~~~~~
 
+// method for drawing on canvas and sending to socket.io
 const handleDraw = (c, e) => {
     // send data to socket so all users see the drawing
     ctx = canvas.getContext('2d');
@@ -83,10 +84,12 @@ const handleDraw = (c, e) => {
     }, false);
 }
 
+// method for changing drawing color
 const handleChangeColor = (color) => {
     x = color;
 }
 
+// method for sending chat message to all users in channel with socket.io
 const handleChatMessage = () => {
     const chatForm = document.getElementById('chatForm');
     const editBox = document.getElementById('editBox');
@@ -104,16 +107,17 @@ const handleChatMessage = () => {
     })
 }
 
+// method for changing password
 const handleChangePassword = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const username = e.target.querySelector('#user').value;
+    //const username = e.target.querySelector('#user').value;
     const currpass = e.target.querySelector('#currpass').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
 
-    if (!username || !currpass || !pass || !pass2) {
+    if (!currpass || !pass || !pass2) {
         helper.handleError('All fields are required!');
         return false;
     }
@@ -123,11 +127,12 @@ const handleChangePassword = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, { username, currpass, pass, pass2 });
+    helper.sendPost(e.target.action, { currpass, pass, pass2 });
 
     return false;
 }
 
+// method for getting username
 const handleGetUsername = async () => {
     const response = await fetch('/getUsername', {
         method: 'GET',
@@ -145,12 +150,14 @@ const handleGetUsername = async () => {
 
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
 
+// display message to all users in channel
 const displayMessage = (msg, username) => {
     const messageDiv = document.createElement('div');
     messageDiv.innerText = `${username}: ${msg}`;
     document.getElementById('messages').appendChild(messageDiv);
 }
 
+// display drawing to all users in channel
 const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     // display the drawing to users who are not the ones drawing (because it is already there for them)
     ctx.save()
@@ -164,6 +171,7 @@ const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     ctx.restore();
 }
 
+// clear canvas for all users in channel
 const clearCanvas = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -181,8 +189,6 @@ const ChangePasswordWindow = (props) => {
                 method='POST'
                 className='mainForm'
             >
-                <label htmlFor='username'>Username: </label>
-                <input id='user' type='text' name='username' placeholder='username' />
                 <label htmlFor='currpass'>Password: </label>
                 <input id='currpass' type='password' name='currpass' placeholder='password' />
                 <label htmlFor='pass'>New Password: </label>
@@ -192,7 +198,7 @@ const ChangePasswordWindow = (props) => {
                 <input className='formSubmit' type='submit' value='Change Password' />
             </form>
 
-            <form action="/maker">
+            <form action="/app">
                 <input className='formSubmit' type='submit' value='Go Back' />
             </form>
         </div>
@@ -246,13 +252,11 @@ const CanvasWindow = (props) => {
 // window for the chat room
 const ChatWindow = (props) => {
     return (
-        <div id="chatDiv">
+        <form id="chatForm">
             <div id="messages"></div>
-            <form id="chatForm">
-                <input id="editBox" type="text" />
-                <input type="submit" />
-            </form>
-        </div>
+            <input id="editBox" type="text" />
+            <input type="submit" />
+        </form>
     )
 }
 
@@ -270,10 +274,10 @@ const init = () => {
 
     changePasswordButton.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('domos').remove();
+        document.getElementById('channelForm').style.display = 'none';
         ReactDOM.render(
             <ChangePasswordWindow />,
-            document.getElementById('makeDomo'));
+            document.getElementById('userControls'));
         return false;
     });
 

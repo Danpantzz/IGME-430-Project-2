@@ -7,7 +7,14 @@ body {
   overflow-x: hidden;
 }
 
-#myCanvas {
+#title {
+  text-align: center;
+}
+
+#app {
+  overflow: auto;
+}
+#app #myCanvas {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -15,27 +22,15 @@ body {
   right: 0;
   margin: auto;
 }
-
-#channelForm {
+#app #canvasControls {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: auto;
-  height: 2em;
 }
-
-#chatForm {
-  display: flex;
-  align-items: center;
-}
-
-#clear {
+#app #canvasControls #clear {
   position: absolute;
   top: 15%;
   left: 48%;
 }
-
-#green {
+#app #canvasControls #green {
   position: absolute;
   top: 15%;
   left: 45%;
@@ -43,8 +38,7 @@ body {
   height: 10px;
   background: green;
 }
-
-#blue {
+#app #canvasControls #blue {
   position: absolute;
   top: 15%;
   left: 46%;
@@ -52,8 +46,7 @@ body {
   height: 10px;
   background: blue;
 }
-
-#red {
+#app #canvasControls #red {
   position: absolute;
   top: 15%;
   left: 47%;
@@ -61,8 +54,7 @@ body {
   height: 10px;
   background: red;
 }
-
-#yellow {
+#app #canvasControls #yellow {
   position: absolute;
   top: 17%;
   left: 45%;
@@ -70,8 +62,7 @@ body {
   height: 10px;
   background: yellow;
 }
-
-#orange {
+#app #canvasControls #orange {
   position: absolute;
   top: 17%;
   left: 46%;
@@ -79,8 +70,7 @@ body {
   height: 10px;
   background: orange;
 }
-
-#black {
+#app #canvasControls #black {
   position: absolute;
   top: 17%;
   left: 47%;
@@ -88,7 +78,13 @@ body {
   height: 10px;
   background: black;
 }
-
+#app #userControls #channelForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  height: 2em;
+}
 #logo {
   height: 40px;
   width: 40;
