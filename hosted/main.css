@@ -90,8 +90,6 @@ body {
   width: 40;
   padding-top: 5px;
   float: left;
-  border: 1px solid #000000;
-  border-radius: 8px;
 }
 
 nav {
@@ -199,7 +197,7 @@ nav:nth-child(1) {
   display: none;
 }
 
-#domoMessage {
+#errorDiv {
   top: 250px;
   width: 250px;
   height: 650px;
@@ -208,7 +206,7 @@ nav:nth-child(1) {
   right: 0px;
   overflow: hidden;
 }
-#domoMessage h3 {
+#errorDiv h3 {
   width: 200px;
   position: absolute;
   top: 0px;

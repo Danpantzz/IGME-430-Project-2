@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <nav><a href="/login"><img id="logo" src="" alt="app logo" /></a>
+  <nav><a href="/login"><img id="logo" src="/assets/img/favicon.png" alt="app logo" /></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
     <div class="navlink"><a href="/editAvatar">Change Avatar</a></div>
     <div class="navlink"><a id="changePassword" href="/changePassword">Change Password</a></div>
@@ -21,10 +21,10 @@
     <section id="userControls"></section>
   </div>
 
-  <div id="domoMessage" class='hidden'>
+  <div id="errorDiv" class='hidden'>
     <img id="speech" src="/assets/img/speech.png" alt="speech box" />
     <h3><span id="errorMessage"></span></h3>
-    <img id="domo" src="assets/img/domo.png" alt="domo" />
+    <img id="error" src="assets/img/domo.png" alt="error icon" />
   </div>
 
   <script src="/socket.io/socket.io.js"></script>

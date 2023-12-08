@@ -88,20 +88,10 @@ const changePassword = async (req, res) => {
   });
 };
 
-const getUsername = (req, res) => {
-  const username = req.session.account.username;
-
-  if (!username) {
-    return res.status(404).json({ error: 'No username found!' });
-  }
-  return res.json({ username });
-}
-
 module.exports = {
   loginPage,
   login,
   logout,
   signup,
-  changePassword,
-  getUsername
+  changePassword
 };

@@ -94,12 +94,12 @@ const handleChatMessage = () => {
     const chatForm = document.getElementById('chatForm');
     const editBox = document.getElementById('editBox');
 
-    chatForm.addEventListener('submit', async (e) => {
+    chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
         if (editBox.value) {
-            let username = await handleGetUsername();
-            socket.emit('chat message', editBox.value, username);
+            //let username = await handleGetUsername();
+            socket.emit('chat message', editBox.value);
             editBox.value = '';
         }
 
@@ -130,22 +130,6 @@ const handleChangePassword = (e) => {
     helper.sendPost(e.target.action, { currpass, pass, pass2 });
 
     return false;
-}
-
-// method for getting username
-const handleGetUsername = async () => {
-    const response = await fetch('/getUsername', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    const result = await response.json();
-
-    if (result.error) {
-        return false;
-    }
-    return result.username;
 }
 
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
@@ -288,7 +272,7 @@ const init = () => {
 
     const channelForm = document.getElementById('channelForm');
 
-    channelForm.addEventListener('submit', async (e) => {
+    channelForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const channelSelect = document.getElementById('channelSelect');
@@ -301,8 +285,7 @@ const init = () => {
             <ChatWindow />,
             document.getElementById('userControls')
         );
-        let username = await handleGetUsername();
-        socket.emit('room selected', channelSelect.value, username);
+        socket.emit('room selected', channelSelect.value);
         handleChatMessage();
     });
 

@@ -36,20 +36,24 @@ const handleClearCanvas = (socket) => {
     })
 }
 
-const socketSetup = (app) => {
+const socketSetup = (app, sessionMiddleware) => {
     const server = http.createServer(app);
     io = new Server(server);
+    io.engine.use(sessionMiddleware);
 
     io.on('connection', (socket) => {
-        console.log('a user connected');
+        const username = socket.request.session.account.username;
+
         socket.join('0');
+        console.log(`${username} connected`);
+        
 
         socket.on('disconnect', () => {
-            console.log('a user disconnected');
+            console.log(`${username} disconnected`);
         });
 
-        socket.on('room selected', (room, username) => handleRoomChange(socket, room, username));
-        socket.on('chat message', (msg, username) => handleChatMessage(socket, msg, username));
+        socket.on('room selected', (room) => handleRoomChange(socket, room, username));
+        socket.on('chat message', (msg) => handleChatMessage(socket, msg, username));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
         socket.on('clear canvas', () => handleClearCanvas(socket));
     });
