@@ -134,6 +134,18 @@ const handleChangePassword = (e) => {
 
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
 
+// display joined/left message to room
+const displayJoinOrLeftMessage = (msg, username) => {
+    const messageDiv = document.createElement('div');
+    messageDiv.id = 'joinedOrLeft';
+
+    const messages = document.getElementById('messages');
+
+    messageDiv.innerHTML = `<i><b>${username} ${msg}</b></i>`;
+    messages.appendChild(messageDiv);
+    messages.scrollTop = messages.scrollHeight;
+}
+
 // display message to all users in channel
 const displayMessage = (msg, username) => {
     const messageDiv = document.createElement('div');
@@ -142,8 +154,6 @@ const displayMessage = (msg, username) => {
     messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
-
-
 }
 
 // display drawing to all users in channel
@@ -300,6 +310,7 @@ const init = () => {
 
 
     handleDraw();
+    socket.on('joined or left', displayJoinOrLeftMessage);
     socket.on('chat message', displayMessage);
     socket.on('draw', displayDrawing);
     socket.on('clear canvas', clearCanvas);

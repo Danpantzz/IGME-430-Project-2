@@ -9,7 +9,8 @@ const handleRoomChange = (socket, roomName, username) => {
         socket.leave(room);
     });
     socket.join(roomName);
-    io.to(roomName).emit('chat message', 'Has joined!', username);
+    console.log(`joined ${roomName}`);
+    io.to(roomName).emit('joined or left', 'has joined!', username);
 }
 
 const handleChatMessage = (socket, msg, username) => {
@@ -46,7 +47,16 @@ const socketSetup = (app, sessionMiddleware) => {
 
         socket.join('0');
         console.log(`${username} connected`);
-        
+
+        // called before user leaves room, emit a message to that room
+        socket.on('disconnecting', () => {
+
+            // if not disconnecting from room 0
+            if (!socket.rooms.has('0')) {
+                io.to(Array.from(socket.rooms)[1]).emit('joined or left', 'has left!', username);
+            }
+
+        });
 
         socket.on('disconnect', () => {
             console.log(`${username} disconnected`);

@@ -158,6 +158,9 @@ body {
 #app #userControls #chatForm #messages div:nth-child(even) {
   background-color: #c7dae8;
 }
+#app #userControls #chatForm #messages #joinedOrLeft {
+  text-align: center;
+}
 #app #userControls #chatForm #formElements {
   margin: 0.5em;
   align-self: center;
