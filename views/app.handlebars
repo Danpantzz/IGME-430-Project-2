@@ -14,9 +14,13 @@
     <div class="navlink"><a id="changePassword" href="/changePassword">Change Password</a></div>
   </nav>
 
+  <h1 id="title">Guess that Drawing!</h1>
+
   <div id="app">
-    <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;" hidden>
-    </canvas>
+    <div id="canvasDiv">
+      <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;" hidden>
+      </canvas>
+    </div>
     <section id="canvasControls"></section>
     <section id="userControls"></section>
   </div>
@@ -24,7 +28,6 @@
   <div id="errorDiv" class='hidden'>
     <img id="speech" src="/assets/img/speech.png" alt="speech box" />
     <h3><span id="errorMessage"></span></h3>
-    <img id="error" src="assets/img/domo.png" alt="error icon" />
   </div>
 
   <script src="/socket.io/socket.io.js"></script>

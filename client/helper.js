@@ -30,7 +30,7 @@ const sendPost = async (url, data, handler) => {
 };
 
 const hideError = () => {
-    document.getElementById('ErrorDiv').classList.add('hidden');
+    document.getElementById('errorDiv').classList.add('hidden');
 };
 
 module.exports = {

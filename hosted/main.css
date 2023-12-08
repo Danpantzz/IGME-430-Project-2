@@ -5,22 +5,69 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: rgb(52, 67, 82);
 }
 
 #title {
   text-align: center;
+  color: lightgrey;
+  font-size: 3em;
+}
+
+.mainForm {
+  height: 300px;
+  width: 350px;
+  margin: 0 auto;
+  padding-top: 300px;
+  font-size: 1.2em;
+}
+.mainForm h3 {
+  text-align: center;
+}
+.mainForm label {
+  display: inline-block;
+  width: 150px;
+  margin-right: 10px;
+  text-align: right;
+  font-size: 1.2em;
+}
+
+.formSubmit {
+  transition: background-color 0.4s ease;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 14px;
+  font-size: 1.2em;
+  width: auto;
+  background-color: #55acee;
+  border-radius: 2px;
+  border-color: #66acee;
+  padding: 3px 0.5em;
+  color: white;
+  text-decoration: none;
+}
+.formSubmit :link,
+.formSubmit :visited,
+.formSubmit :hover,
+.formSubmit :active {
+  color: white;
+}
+.formSubmit :hover {
+  transition: background-color 0.4s ease;
+  background-color: #338acc;
 }
 
 #app {
-  overflow: auto;
+  display: flex;
+  height: 80%;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
 }
-#app #myCanvas {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+#app #canvasDiv #myCanvas {
   margin: auto;
+  background-color: white;
 }
 #app #canvasControls {
   display: flex;
@@ -79,17 +126,46 @@ body {
   background: black;
 }
 #app #userControls #channelForm {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   align-items: center;
-  margin-top: auto;
+  justify-content: center;
+  margin-top: 1em;
   height: 2em;
 }
-#logo {
-  height: 40px;
-  width: 40;
-  padding-top: 5px;
-  float: left;
+#app #userControls #chatForm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+  border: 1px solid #000000;
+  width: 18em;
+  height: 300px;
+  margin: 1em;
+  padding: 1em 1em 0px 1em;
+  background-color: lightblue;
+}
+#app #userControls #chatForm #messages {
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border: 1px solid black;
+}
+#app #userControls #chatForm #messages div {
+  padding: 2px;
+}
+#app #userControls #chatForm #messages div:nth-child(even) {
+  background-color: #c7dae8;
+}
+#app #userControls #chatForm #formElements {
+  margin: 0.5em;
+  align-self: center;
+  justify-self: center;
+}
+#app #userControls #chatForm #formElements input {
+  flex-direction: row;
+  margin: 2px;
 }
 
 nav {
@@ -97,12 +173,16 @@ nav {
   height: 50px;
   background-color: #55acee;
 }
-
-nav:nth-child(1) {
+nav #logo {
+  height: 40px;
+  width: 40;
+  padding-top: 5px;
+  float: left;
+}
+nav :nth-child(1) {
   padding-left: 25px;
 }
-
-.navlink {
+nav .navlink {
   padding: 5px;
   padding-top: 12px;
   padding-left: 20px;
@@ -110,12 +190,11 @@ nav:nth-child(1) {
   font-size: 1.3em;
   float: left;
 }
-
-.navlink a,
-.navlink a:link,
-.navlink a:visited,
-.navlink a:hover,
-.navlink a:active {
+nav .navlink a,
+nav .navlink a:link,
+nav .navlink a:visited,
+nav .navlink a:hover,
+nav .navlink a:active {
   color: white;
   text-decoration: none;
   padding: 5px;
@@ -123,56 +202,9 @@ nav:nth-child(1) {
   background-color: #55acee;
   transition: background-color 0.4s ease;
 }
-
-.navlink a:hover {
+nav .navlink a:hover {
   transition: background-color 0.8s ease;
   background-color: #66bdff;
-}
-
-.mainForm {
-  height: 300px;
-  width: 350px;
-  margin: 0 auto;
-  padding-top: 350px;
-  font-size: 1.2em;
-}
-.mainForm h3 {
-  text-align: center;
-}
-.mainForm label {
-  display: inline-block;
-  width: 150px;
-  margin-right: 10px;
-  text-align: right;
-  font-size: 1.2em;
-}
-
-.formSubmit {
-  transition: background-color 0.4s ease;
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-  margin-top: 14px;
-  font-size: 1.2em;
-  width: auto;
-  background-color: #55acee;
-  border-radius: 2px;
-  border-color: #66acee;
-  padding: 3px 0.5em;
-  color: white;
-  text-decoration: none;
-}
-
-.formSubmit:link,
-.formSubmit:visited,
-.formSubmit:hover,
-.formSubmit:active {
-  color: white;
-}
-
-.formSubmit:hover {
-  transition: background-color 0.4s ease;
-  background-color: #338acc;
 }
 
 #user,
@@ -184,11 +216,10 @@ nav:nth-child(1) {
   width: 180px;
   border-radius: 6px;
 }
-
-#user:focus,
-#currpass:focus,
-#pass:focus,
-#pass2:focus {
+#user :focus,
+#currpass :focus,
+#pass :focus,
+#pass2 :focus {
   outline: none;
   box-shadow: 0px 0px 1px 1px #55acee;
 }

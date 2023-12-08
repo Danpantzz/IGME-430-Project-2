@@ -137,8 +137,13 @@ const handleChangePassword = (e) => {
 // display message to all users in channel
 const displayMessage = (msg, username) => {
     const messageDiv = document.createElement('div');
-    messageDiv.innerText = `${username}: ${msg}`;
-    document.getElementById('messages').appendChild(messageDiv);
+    const messages = document.getElementById('messages');
+
+    messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
+    messages.appendChild(messageDiv);
+    messages.scrollTop = messages.scrollHeight;
+
+
 }
 
 // display drawing to all users in channel
@@ -212,6 +217,8 @@ const MainWindow = (props) => {
 
 // window for playing the game
 const CanvasWindow = (props) => {
+    document.getElementById('title').style.display = 'none';
+
     canvas.style.display = 'block';
 
     return (
@@ -238,8 +245,10 @@ const ChatWindow = (props) => {
     return (
         <form id="chatForm">
             <div id="messages"></div>
-            <input id="editBox" type="text" />
-            <input type="submit" />
+            <div id='formElements'>
+                <input id="editBox" type="text" placeholder='Type your guess here...' />
+                <input type="submit" />
+            </div>
         </form>
     )
 }
