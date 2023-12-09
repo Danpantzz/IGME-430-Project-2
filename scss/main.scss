@@ -74,8 +74,8 @@ body {
     //overflow: auto;
 
     #canvasDiv {
-        //display: flex;
-
+        display: flex;
+        flex-direction: column-reverse;
 
         // https://stackoverflow.com/questions/1152203/centering-a-canvas
         #myCanvas {
@@ -91,67 +91,87 @@ body {
     }
 
     #canvasControls {
-        display: flex;
+        //display: flex;
+        //border: 1px solid black;
 
-        // Temporary styles
-        #clear {
-            position: absolute;
-            top: 15%;
-            left: 48%;
-        }
+        #controlsDiv {
+            background-color: lightblue;
+            padding: .5em;
+            border: solid black;
+            border-width: 1px 1px 0px 1px;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 1em;
 
-        #green {
-            position: absolute;
-            top: 15%;
-            left: 45%;
-            width: 10px;
-            height: 10px;
-            background: green;
-        }
 
-        #blue {
-            position: absolute;
-            top: 15%;
-            left: 46%;
-            width: 10px;
-            height: 10px;
-            background: blue;
-        }
+            // Temporary styles
+            #clear {
+                //position: absolute;
+                top: 15%;
+                left: 48%;
+            }
 
-        #red {
-            position: absolute;
-            top: 15%;
-            left: 47%;
-            width: 10px;
-            height: 10px;
-            background: red;
-        }
+            #colorsDiv {
+                display: flex;
+                //height: 100%;
+                align-items: stretch;
+                gap: 1em;
+                overflow-x: auto;
 
-        #yellow {
-            position: absolute;
-            top: 17%;
-            left: 45%;
-            width: 10px;
-            height: 10px;
-            background: yellow;
-        }
+                #green {
+                    //position: absolute;
+                    // top: 15%;
+                    // left: 45%;
+                    // width: 10px;
+                    background: green;
+                }
 
-        #orange {
-            position: absolute;
-            top: 17%;
-            left: 46%;
-            width: 10px;
-            height: 10px;
-            background: orange;
-        }
+                #blue {
+                    //position: absolute;
+                    // top: 15%;
+                    // left: 46%;
+                    // width: 10px;
+                    // height: 10px;
+                    background: blue;
+                }
 
-        #black {
-            position: absolute;
-            top: 17%;
-            left: 47%;
-            width: 10px;
-            height: 10px;
-            background: black;
+                #red {
+                    //position: absolute;
+                    // top: 15%;
+                    // left: 47%;
+                    // width: 10px;
+                    // height: 10px;
+                    background: red;
+                }
+
+                #yellow {
+                    //position: absolute;
+                    // top: 17%;
+                    // left: 45%;
+                    // width: 10px;
+                    // height: 10px;
+                    background: yellow;
+                }
+
+                #orange {
+                    //position: absolute;
+                    // top: 17%;
+                    // left: 46%;
+                    // width: 10px;
+                    // height: 10px;
+                    background: orange;
+                }
+
+                #black {
+                    //position: absolute;
+                    // top: 17%;
+                    // left: 47%;
+                    // width: 10px;
+                    // height: 10px;
+                    background: black;
+                }
+            }
         }
     }
 
@@ -177,7 +197,7 @@ body {
             //overflow-y: auto;
             border: 1px solid #000000;
             width: 18em;
-            height: 300px;
+            height: 65%;
             margin: 1em;
             padding: 1em 1em 0px 1em;
             background-color: lightblue;

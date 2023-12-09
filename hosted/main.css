@@ -65,64 +65,50 @@ body {
   justify-content: center;
   gap: 1em;
 }
+#app #canvasDiv {
+  display: flex;
+  flex-direction: column-reverse;
+}
 #app #canvasDiv #myCanvas {
   margin: auto;
   background-color: white;
 }
-#app #canvasControls {
+#app #canvasControls #controlsDiv {
+  background-color: lightblue;
+  padding: 0.5em;
+  border: solid black;
+  border-width: 1px 1px 0px 1px;
   display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1em;
 }
-#app #canvasControls #clear {
-  position: absolute;
+#app #canvasControls #controlsDiv #clear {
   top: 15%;
   left: 48%;
 }
-#app #canvasControls #green {
-  position: absolute;
-  top: 15%;
-  left: 45%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv {
+  display: flex;
+  align-items: stretch;
+  gap: 1em;
+  overflow-x: auto;
+}
+#app #canvasControls #controlsDiv #colorsDiv #green {
   background: green;
 }
-#app #canvasControls #blue {
-  position: absolute;
-  top: 15%;
-  left: 46%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv #blue {
   background: blue;
 }
-#app #canvasControls #red {
-  position: absolute;
-  top: 15%;
-  left: 47%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv #red {
   background: red;
 }
-#app #canvasControls #yellow {
-  position: absolute;
-  top: 17%;
-  left: 45%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv #yellow {
   background: yellow;
 }
-#app #canvasControls #orange {
-  position: absolute;
-  top: 17%;
-  left: 46%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv #orange {
   background: orange;
 }
-#app #canvasControls #black {
-  position: absolute;
-  top: 17%;
-  left: 47%;
-  width: 10px;
-  height: 10px;
+#app #canvasControls #controlsDiv #colorsDiv #black {
   background: black;
 }
 #app #userControls #channelForm {
@@ -139,7 +125,7 @@ body {
   justify-content: end;
   border: 1px solid #000000;
   width: 18em;
-  height: 300px;
+  height: 65%;
   margin: 1em;
   padding: 1em 1em 0px 1em;
   background-color: lightblue;

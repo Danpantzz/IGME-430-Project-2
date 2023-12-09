@@ -9,8 +9,10 @@ const handleRoomChange = (socket, roomName, username) => {
         socket.leave(room);
     });
     socket.join(roomName);
-    console.log(`joined ${roomName}`);
+
     io.to(roomName).emit('joined or left', 'has joined!', username);
+    io.to(roomName).emit('update room size', io.sockets.adapter.rooms.get(roomName).size);
+
 }
 
 const handleChatMessage = (socket, msg, username) => {
@@ -54,6 +56,7 @@ const socketSetup = (app, sessionMiddleware) => {
             // if not disconnecting from room 0
             if (!socket.rooms.has('0')) {
                 io.to(Array.from(socket.rooms)[1]).emit('joined or left', 'has left!', username);
+                io.to(Array.from(socket.rooms)[1]).emit('update room size', io.sockets.adapter.rooms.get(Array.from(socket.rooms)[1]).size);
             }
 
         });

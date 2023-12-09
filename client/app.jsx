@@ -62,7 +62,8 @@ const handleDraw = (c, e) => {
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
         ctx.strokeStyle = x;
-        ctx.lineWidth = y;
+        if (x == 'white') { ctx.lineWidth = 15; }
+        else { ctx.lineWidth = y; }
         ctx.stroke();
         ctx.closePath();
         ctx.restore();
@@ -87,6 +88,10 @@ const handleDraw = (c, e) => {
 // method for changing drawing color
 const handleChangeColor = (color) => {
     x = color;
+}
+
+const handleChangeWidth = (width) => {
+    y = width;
 }
 
 // method for sending chat message to all users in channel with socket.io
@@ -154,6 +159,10 @@ const displayMessage = (msg, username) => {
     messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
+}
+
+const displayRoomSize = (size) => {
+
 }
 
 // display drawing to all users in channel
@@ -242,10 +251,19 @@ const CanvasWindow = (props) => {
                 <button id="orange" onClick={() => handleChangeColor("orange")}></button>
                 <button id="black" onClick={() => handleChangeColor("black")}></button>
             </div>
+            <button id='eraser' onClick={() => {
+                handleChangeColor('white')
+            }}>Eraser</button>
             <button id='clear' onClick={() => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 socket.emit('clear canvas');
             }}>Clear</button>
+            <select name='width' id='widthSelect' onChange={(e) => handleChangeWidth(e.target.value)}>
+                <option value='2'>width 2</option>
+                <option value='4'>width 4</option>
+                <option value='6'>width 6</option>
+                <option value='8'>width 8</option>
+            </select>
         </div>
     )
 }
@@ -310,6 +328,7 @@ const init = () => {
 
 
     handleDraw();
+    socket.on('update room size', displayRoomSize);
     socket.on('joined or left', displayJoinOrLeftMessage);
     socket.on('chat message', displayMessage);
     socket.on('draw', displayDrawing);
