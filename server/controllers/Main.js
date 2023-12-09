@@ -1,6 +1,7 @@
 //const models = require('../models');
 
 //const { Domo } = models;
+//const {Account} = models;
 
 const appPage = async (req, res) => res.render('app');
 
@@ -40,6 +41,7 @@ const appPage = async (req, res) => res.render('app');
 //     return res.status(500).json({ error: 'Error retrieving domos!' });
 //   }
 // };
+
 
 module.exports = {
   appPage,

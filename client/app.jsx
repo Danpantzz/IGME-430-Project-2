@@ -161,7 +161,17 @@ const displayMessage = (msg, username) => {
     messages.scrollTop = messages.scrollHeight;
 }
 
-const displayRoomSize = (size) => {
+// display usernames in room
+const displayRoomSize = (userArray) => {
+    const userList = document.getElementById('users');
+    userList.innerHTML = '';
+
+    // add user to user list
+    userArray.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.innerHTML = `${user}`;
+        userList.appendChild(userDiv);
+    })
 
 }
 

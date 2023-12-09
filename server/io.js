@@ -3,7 +3,7 @@ const { Server } = require('socket.io');
 
 let io;
 
-const handleRoomChange = (socket, roomName, username) => {
+const handleRoomChange = async (socket, roomName, username) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
         socket.leave(room);
@@ -11,7 +11,14 @@ const handleRoomChange = (socket, roomName, username) => {
     socket.join(roomName);
 
     io.to(roomName).emit('joined or left', 'has joined!', username);
-    io.to(roomName).emit('update room size', io.sockets.adapter.rooms.get(roomName).size);
+
+    const sockets = await io.in(roomName).fetchSockets();
+    const userArray = [];
+    sockets.forEach(thisSocket => {
+        userArray.push(thisSocket.request.session.account.username);
+    })
+
+    io.to(roomName).emit('update room size', userArray);
 
 }
 
@@ -51,12 +58,25 @@ const socketSetup = (app, sessionMiddleware) => {
         console.log(`${username} connected`);
 
         // called before user leaves room, emit a message to that room
-        socket.on('disconnecting', () => {
+        socket.on('disconnecting', async () => {
 
             // if not disconnecting from room 0
             if (!socket.rooms.has('0')) {
-                io.to(Array.from(socket.rooms)[1]).emit('joined or left', 'has left!', username);
-                io.to(Array.from(socket.rooms)[1]).emit('update room size', io.sockets.adapter.rooms.get(Array.from(socket.rooms)[1]).size);
+                // get the room this socket is in
+                const room = Array.from(socket.rooms)[1];
+
+                // tell room they left
+                io.to(room).emit('joined or left', 'has left!', username);
+
+                // update list of users in that room
+                const sockets = await io.in(room).fetchSockets();
+                const userArray = [];
+                sockets.forEach(thisSocket => {
+                    if (thisSocket === socket) { return; }
+                    userArray.push(thisSocket.request.session.account.username);
+                });
+
+                io.to(room).emit('update room size', userArray);
             }
 
         });
