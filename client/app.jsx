@@ -165,13 +165,20 @@ const displayMessage = (msg, username) => {
 const displayRoomSize = (userArray) => {
     const userList = document.getElementById('users');
     userList.innerHTML = '';
+    userList.style.display = 'block';
+
+    const usersContainer = document.createElement('div');
+    usersContainer.id = 'usersContainer';
 
     // add user to user list
     userArray.forEach(user => {
-        const userDiv = document.createElement('div');
-        userDiv.innerHTML = `${user}`;
-        userList.appendChild(userDiv);
+        const userElement = document.createElement('h3');
+
+        userElement.id = 'userItem'
+        userElement.innerHTML = `${user}`;
+        usersContainer.appendChild(userElement);
     })
+    userList.appendChild(usersContainer);
 
 }
 
