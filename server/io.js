@@ -52,6 +52,14 @@ const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     })
 }
 
+const handleCircle = (socket, currX, currY, x, y) => {
+    socket.rooms.forEach(room => {
+        if (room === socket.id) return;
+
+        io.to(room).emit('circle', currX, currY, x, y);
+    })
+}
+
 // called when clear canvas button is pressed
 const handleClearCanvas = (socket) => {
     socket.rooms.forEach(room => {
@@ -105,6 +113,7 @@ const socketSetup = (app, sessionMiddleware) => {
         socket.on('chat message', (msg) => handleChatMessage(socket, msg, username));
         socket.on('dot', (currX, currY, x, y) => handleDot(socket, currX, currY, x, y));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
+        socket.on('circle', (currX, currY, x, y) => handleCircle(socket, currX, currY, x, y));
         socket.on('clear canvas', () => handleClearCanvas(socket));
     });
 

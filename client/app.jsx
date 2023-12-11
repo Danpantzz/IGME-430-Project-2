@@ -13,6 +13,8 @@ var canvas, ctx;
 var x = "black",
     y = 2;
 
+var line = true, circle = false, square = false;
+
 // Handlers ~~~~~~~~~~~~~~~~~~~
 
 // method for drawing on canvas and sending to socket.io
@@ -40,16 +42,27 @@ const handleDraw = (c, e) => {
                 currY = e.clientY - canvas.offsetTop;
             }
 
-            flag = true;
-            dot_flag = true;
-            if (dot_flag) {
+            if (line) {
+                flag = true;
+                dot_flag = true;
+                if (dot_flag) {
+                    ctx.beginPath();
+                    ctx.fillStyle = x;
+                    ctx.fillRect(currX, currY, y, y);
+                    ctx.closePath();
+                    dot_flag = false;
+
+                    socket.emit('dot', currX, currY, x, y);
+                }
+            }
+            if (circle) {
                 ctx.beginPath();
                 ctx.fillStyle = x;
-                ctx.fillRect(currX, currY, y, y);
+                ctx.arc(currX, currY, y * 2, 0, 2 * Math.PI);
+                ctx.fill();
                 ctx.closePath();
-                dot_flag = false;
 
-                socket.emit('dot', currX, currY, x, y);
+                socket.emit('circle', currX, currY, x, y);
             }
         }
         if (res == 'up' || res == "out") {
@@ -102,7 +115,7 @@ const handleDraw = (c, e) => {
         findxy('out', ctx, e)
     }, false);
 
-    // touch events
+    // touchscreen events
     canvas.addEventListener("touchmove", function (e) {
         e.preventDefault();
         findxy('move', ctx, e)
@@ -233,7 +246,7 @@ const displayRoomSize = (userArray) => {
         // change username color if user is premium
         if (user.premium) {
             userElement.style.color = 'white';
-            userElement.style.textShadow = '#E80 2px 0 7px';
+            userElement.style.textShadow = '#000 2px 1px 3px, #E80 3px 0 10px';
         }
         usersContainer.appendChild(userElement);
     })
@@ -260,6 +273,16 @@ const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     ctx.strokeStyle = _x;
     ctx.lineWidth = _y;
     ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
+}
+
+const displayCircle = (_currX, _currY, _x, _y) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = _x;
+    ctx.arc(_currX, _currY, _y * 2, 0, 2 * Math.PI);
+    ctx.fill();
     ctx.closePath();
     ctx.restore();
 }
@@ -323,10 +346,10 @@ const MainWindow = (props) => {
 const CanvasWindow = (props) => {
     const [premium, setPremium] = useState(props.premium);
 
+    // get premium status of current client
     useEffect(() => {
         const requestPremiumStatus = async () => {
             const response = await fetch('/getPremiumStatus');
-            //const result = await response.json();
             setPremium(await response.json());
         };
         requestPremiumStatus();
@@ -336,6 +359,7 @@ const CanvasWindow = (props) => {
 
     canvas.style.display = 'block';
 
+    // if premium is not defined yet (happens on first render) or user is not premium
     if (premium === undefined || premium.premiumStatus === false) {
         return (
             // div for canvasControls
@@ -360,11 +384,15 @@ const CanvasWindow = (props) => {
                     <option value='4'>width 4</option>
                     <option value='6'>width 6</option>
                     <option value='8'>width 8</option>
+                    <option value='10'>width 10</option>
+                    <option value='12'>width 12</option>
+                    <option value='14'>width 14</option>
                 </select>
             </div>
         )
     }
 
+    // user is premium, render special controls
     else if (premium.premiumStatus === true) {
         return (
             // div for canvasControls
@@ -389,8 +417,16 @@ const CanvasWindow = (props) => {
                     <option value='4'>width 4</option>
                     <option value='6'>width 6</option>
                     <option value='8'>width 8</option>
+                    <option value='10'>width 10</option>
+                    <option value='12'>width 12</option>
+                    <option value='14'>width 14</option>
                 </select>
-            </div>
+                <div id='shapesDiv'>
+                    <button id='line' onClick={() => { line = true; circle = false; square = false; }}>Line</button>
+                    <button id='circle' onClick={() => { line = false; circle = true; square = false; }}>Circle</button>
+                    {/* <button id='square' onClick={() => { line = false; circle = false; square = true; }}>Square</button> */}
+                </div>
+            </div >
         )
 
     }
@@ -512,6 +548,7 @@ const init = () => {
     socket.on('chat message', displayMessage);
     socket.on('dot', displayDot);
     socket.on('draw', displayDrawing);
+    socket.on('circle', displayCircle);
     socket.on('clear canvas', clearCanvas);
 
 }
