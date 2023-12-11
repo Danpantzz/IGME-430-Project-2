@@ -2,6 +2,8 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const { useState, useEffect } = React;
+
 const socket = io();
 
 // utilizes a lot from this comprehensive drawing example
@@ -29,8 +31,15 @@ const handleDraw = (c, e) => {
         if (res == 'down') {
             prevX = currX;
             prevY = currY;
-            currX = e.clientX - canvas.offsetLeft;
-            currY = e.clientY - canvas.offsetTop;
+
+            if (e.touches) {
+                currX = e.touches["0"].clientX - canvas.offsetLeft;
+                currY = e.touches["0"].clientY - canvas.offsetTop;
+            }
+            else {
+                currX = e.clientX - canvas.offsetLeft;
+                currY = e.clientY - canvas.offsetTop;
+            }
 
             flag = true;
             dot_flag = true;
@@ -49,8 +58,14 @@ const handleDraw = (c, e) => {
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = e.clientX - canvas.offsetLeft;
-                currY = e.clientY - canvas.offsetTop;
+                if (e.touches) {
+                    currX = e.touches["0"].clientX - canvas.offsetLeft;
+                    currY = e.touches["0"].clientY - canvas.offsetTop;
+                }
+                else {
+                    currX = e.clientX - canvas.offsetLeft;
+                    currY = e.clientY - canvas.offsetTop;
+                }
                 draw(ctx);
             }
         }
@@ -71,6 +86,7 @@ const handleDraw = (c, e) => {
         socket.emit('draw', prevX, prevY, currX, currY, x, y);
     }
 
+    // mouse events
     canvas.addEventListener("mousemove", function (e) {
         findxy('move', ctx, e)
     }, false);
@@ -82,6 +98,17 @@ const handleDraw = (c, e) => {
     }, false);
     canvas.addEventListener("mouseout", function (e) {
         findxy('out', ctx, e)
+    }, false);
+
+    // touch events
+    canvas.addEventListener("touchmove", function (e) {
+        findxy('move', ctx, e)
+    }, false);
+    canvas.addEventListener("touchstart", function (e) {
+        findxy('down', ctx, e)
+    }, false);
+    canvas.addEventListener("touchend", function (e) {
+        findxy('up', ctx, e)
     }, false);
 }
 
@@ -112,6 +139,12 @@ const handleChatMessage = () => {
     })
 }
 
+const handlePlayGame = (e) => {
+    e.preventDefault();
+
+
+}
+
 // method for changing password
 const handleChangePassword = (e) => {
     e.preventDefault();
@@ -137,6 +170,21 @@ const handleChangePassword = (e) => {
     return false;
 }
 
+const handleBuyPremium = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const password = e.target.querySelector('#currpass').value;
+
+    if (!password) {
+        helper.handleError('You must enter your password to confirm!');
+        return false;
+    }
+
+    helper.sendPost(e.target.action, { password });
+    return false;
+}
+
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
 
 // display joined/left message to room
@@ -152,10 +200,11 @@ const displayJoinOrLeftMessage = (msg, username) => {
 }
 
 // display message to all users in channel
-const displayMessage = (msg, username) => {
+const displayMessage = (msg, username, premium) => {
     const messageDiv = document.createElement('div');
     const messages = document.getElementById('messages');
 
+    if (premium) messageDiv.innerHTML = `<b style="color:gold">${username}:</b> ${msg}`;
     messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
@@ -175,7 +224,10 @@ const displayRoomSize = (userArray) => {
         const userElement = document.createElement('h3');
 
         userElement.id = 'userItem'
-        userElement.innerHTML = `${user}`;
+        userElement.innerHTML = `${user.username}`;
+        if (user.premium) {
+            userElement.style.color = '#dba21d';
+        }
         usersContainer.appendChild(userElement);
     })
     userList.appendChild(usersContainer);
@@ -253,36 +305,79 @@ const MainWindow = (props) => {
 
 // window for playing the game
 const CanvasWindow = (props) => {
+    const [premium, setPremium] = useState(props.premium);
+
+    useEffect(() => {
+        const requestPremiumStatus = async () => {
+            const response = await fetch('/getPremiumStatus');
+            //const result = await response.json();
+            setPremium(await response.json());
+        };
+        requestPremiumStatus();
+    }, '');
+
     document.getElementById('title').style.display = 'none';
 
     canvas.style.display = 'block';
 
-    return (
-        // div for canvasControls
-        <div id='controlsDiv'>
-            <div id="colorsDiv">
-                <button id="green" onClick={() => handleChangeColor("green")}></button>
-                <button id="blue" onClick={() => handleChangeColor("blue")}></button>
-                <button id="red" onClick={() => handleChangeColor("red")}></button>
-                <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
-                <button id="orange" onClick={() => handleChangeColor("orange")}></button>
-                <button id="black" onClick={() => handleChangeColor("black")}></button>
+    if (premium === undefined || premium.premiumStatus === false) {
+        return (
+            // div for canvasControls
+            <div id='controlsDiv'>
+                <div id="colorsDiv">
+                    <button id="green" onClick={() => handleChangeColor("green")}></button>
+                    <button id="blue" onClick={() => handleChangeColor("blue")}></button>
+                    <button id="red" onClick={() => handleChangeColor("red")}></button>
+                    <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
+                    <button id="orange" onClick={() => handleChangeColor("orange")}></button>
+                    <button id="black" onClick={() => handleChangeColor("black")}></button>
+                </div>
+                <button id='eraser' onClick={() => {
+                    handleChangeColor('white')
+                }}>Eraser</button>
+                <button id='clear' onClick={() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    socket.emit('clear canvas');
+                }}>Clear</button>
+                <select name='width' id='widthSelect' onChange={(e) => handleChangeWidth(e.target.value)}>
+                    <option value='2'>width 2</option>
+                    <option value='4'>width 4</option>
+                    <option value='6'>width 6</option>
+                    <option value='8'>width 8</option>
+                </select>
             </div>
-            <button id='eraser' onClick={() => {
-                handleChangeColor('white')
-            }}>Eraser</button>
-            <button id='clear' onClick={() => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                socket.emit('clear canvas');
-            }}>Clear</button>
-            <select name='width' id='widthSelect' onChange={(e) => handleChangeWidth(e.target.value)}>
-                <option value='2'>width 2</option>
-                <option value='4'>width 4</option>
-                <option value='6'>width 6</option>
-                <option value='8'>width 8</option>
-            </select>
-        </div>
-    )
+        )
+    }
+
+    else if (premium.premiumStatus === true) {
+        return (
+            // div for canvasControls
+            <div id='controlsDiv'>
+                <div id="colorsDiv">
+                    <button id="green" onClick={() => handleChangeColor("green")}></button>
+                    <button id="blue" onClick={() => handleChangeColor("blue")}></button>
+                    <button id="red" onClick={() => handleChangeColor("red")}></button>
+                    <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
+                    <button id="orange" onClick={() => handleChangeColor("orange")}></button>
+                    <button id="black" onClick={() => handleChangeColor("black")}></button>
+                </div>
+                <button id='eraser' onClick={() => {
+                    handleChangeColor('white')
+                }}>Eraser</button>
+                <button id='clear' onClick={() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    socket.emit('clear canvas');
+                }}>Clear</button>
+                <select name='width' id='widthSelect' onChange={(e) => handleChangeWidth(e.target.value)}>
+                    <option value='2'>width 2</option>
+                    <option value='4'>width 4</option>
+                    <option value='6'>width 6</option>
+                    <option value='8'>width 8</option>
+                </select>
+            </div>
+        )
+
+    }
 }
 
 // window for the chat room
@@ -298,17 +393,45 @@ const ChatWindow = (props) => {
     )
 }
 
+const PlayButton = (props) => {
+    return (
+        <button id='playButton' onClick={(e) => handlePlayGame(e)}>Play Game</button>
+    )
+}
 
-//// Cannot change canvas size because it cuts off content on smaller screens, and refreshes the canvas
-// const changeCanvasSize = () => {
-//     //let canvas = document.getElementById('myCanvas');
-//     canvas.width = window.innerWidth * .5;
-//     canvas.height = window.innerHeight * .8;
-// }
+const PremiumWindow = (props) => {
+    return (
+        <div id='premiumDiv'>
+            <form id='premiumForm'
+                name='premiumForm'
+                onSubmit={handleBuyPremium}
+                action='/buyPremium'
+                method='POST'
+            >
+                <h2>Would you like to buy Premium?</h2>
+                <h3>It comes with these amazing features:</h3>
+                <ul>
+                    <li>More color options</li>
+                    <li>Shapes to draw with</li>
+                    <li>And More!</li>
+                </ul>
+                <label htmlFor='currpass'>Please enter your password to confirm:</label>
+                <input id='currpass' type='password' name='currpass' placeholder='password' />
+                <input type='submit' value='Confirm' />
+            </form>
+
+            <form action="/app">
+                <input className='formSubmit' type='submit' value='Go Back' />
+            </form>
+        </div>
+    );
+}
+
 
 const init = () => {
     canvas = document.getElementById('myCanvas');
     const changePasswordButton = document.getElementById('changePassword');
+    const premiumButton = document.getElementById('buyPremium');
 
     changePasswordButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -317,6 +440,25 @@ const init = () => {
             <ChangePasswordWindow />,
             document.getElementById('userControls'));
         return false;
+    });
+
+    premiumButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (document.getElementById('channelForm')) {
+            document.getElementById('channelForm').style.display = 'none';
+        }
+        else {
+            canvas.style.display = 'none';
+            document.getElementById('users').style.display = 'none';
+            document.getElementById('controlsDiv').style.display = 'none';
+            document.getElementById('chatForm').style.display = 'none';
+            document.getElementById('playButton').style.display = 'none';
+        }
+
+        ReactDOM.render(
+            <PremiumWindow premium='false' />,
+            document.getElementById('app')
+        );
     });
 
     ReactDOM.render(
@@ -338,6 +480,10 @@ const init = () => {
         ReactDOM.render(
             <ChatWindow />,
             document.getElementById('userControls')
+        );
+        ReactDOM.render(
+            <PlayButton />,
+            document.getElementById('playControls')
         );
         socket.emit('room selected', channelSelect.value);
         handleChatMessage();

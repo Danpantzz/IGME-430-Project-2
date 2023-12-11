@@ -12,9 +12,10 @@ const router = (app) => {
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
   app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
+  app.post('/buyPremium', mid.requiresLogin, controllers.Account.buyPremium);
 
   app.get('/app', mid.requiresLogin, controllers.Main.appPage);
-  //app.post('/maker', mid.requiresLogin, controllers.Main.makeDomo);
+  app.get('/getPremiumStatus', mid.requiresLogin, controllers.Account.getPremiumStatus);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

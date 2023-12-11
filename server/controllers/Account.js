@@ -88,10 +88,41 @@ const changePassword = async (req, res) => {
   });
 };
 
+const buyPremium = async (req, res) => {
+  console.log(`${req.session.account.username} buying premium`);
+  const username = `${req.session.account.username}`;
+  const password = `${req.body.password}`;
+
+  return Account.authenticate(username, password, async (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'Wrong password!' });
+    }
+    try {
+      const acc = account;
+      acc.premium = true;
+      req.session.account.premium = true;
+      await acc.save();
+      return res.json({ redirect: '/app' });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'An error occured!' });
+    }
+  });
+}
+
+const getPremiumStatus = async (req, res) => {
+  const premiumStatus = req.session.account.premium;
+  console.log(`premium status: ${premiumStatus}`);
+
+  return res.json({ premiumStatus });
+}
+
 module.exports = {
   loginPage,
   login,
   logout,
   signup,
-  changePassword
+  changePassword,
+  buyPremium,
+  getPremiumStatus
 };

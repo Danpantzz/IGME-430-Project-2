@@ -10,13 +10,14 @@
 <body>
   <nav><a href="/login"><img id="logo" src="/assets/img/favicon.png" alt="app logo" /></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
-    <div class="navlink"><a href="/editAvatar">Change Avatar</a></div>
+    <div class="navlink"><a id="buyPremium" href="/buyPremium">Premium</a></div>
     <div class="navlink"><a id="changePassword" href="/changePassword">Change Password</a></div>
   </nav>
 
-  <h1 id="title">Guess that Drawing!</h1>
+  <div id="titleContainer"><img id="title" src="/assets/img/titleBackground.png" alt="Guess that Drawing!"
+      draggable="false" /></div>
 
-  <div id="app">
+  <section id="app">
     <section id="users" hidden></section>
     <div id="canvasDiv">
       <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;" hidden>
@@ -24,7 +25,9 @@
       <section id="canvasControls"></section>
     </div>
     <section id="userControls"></section>
-  </div>
+  </section>
+
+  <section id="playControls"></section>
 
   <div id="errorDiv" class='hidden'>
     <img id="speech" src="/assets/img/speech.png" alt="speech box" />

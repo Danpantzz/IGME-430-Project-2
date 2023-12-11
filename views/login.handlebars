@@ -1,28 +1,33 @@
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <title>Project 2</title>
-  <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/main.css"/>
+  <link rel="shortcut icon" href="/assets/img/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="/assets/main.css" />
 </head>
-<body> 
-  <nav><a href="/login"><img id="logo" src="/assets/img/favicon.png" alt="app logo"/></a>
+
+<body>
+  <nav><a href="/login"><img id="logo" src="/assets/img/favicon.png" alt="app logo" /></a>
     <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
     <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
   </nav>
 
-  <h1 id="title">Guess that Drawing!</h1>
-  
+  <div id="titleContainer"><img id="title" src="/assets/img/titleBackground.png" alt="Guess that Drawing!"
+      draggable="false" /></div>
+
   <section id="content">
 
   </section>
 
   <div id="errorDiv" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <img id="speech" src="/assets/img/speech.png" alt="speech box" />
     <h3><span id="errorMessage"></span></h3>
   </div>
 
-  {{!-- <script src="/socket.io/socket.io.js"></script> --}}
+  {{!--
+  <script src="/socket.io/socket.io.js"></script> --}}
   <script src="/assets/loginBundle.js"></script>
 </body>
+
 </html>

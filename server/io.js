@@ -3,6 +3,7 @@ const { Server } = require('socket.io');
 
 let io;
 
+// called when anyone enters a room
 const handleRoomChange = async (socket, roomName, username) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -15,21 +16,26 @@ const handleRoomChange = async (socket, roomName, username) => {
     const sockets = await io.in(roomName).fetchSockets();
     const userArray = [];
     sockets.forEach(thisSocket => {
-        userArray.push(thisSocket.request.session.account.username);
+        const thisUsername = thisSocket.request.session.account.username;
+        const premium = thisSocket.request.session.account.premium;
+        userArray.push({ "username": thisUsername, "premium": premium });
     })
 
     io.to(roomName).emit('update room size', userArray);
 
 }
 
+// called when a message is sent
 const handleChatMessage = (socket, msg, username) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
 
-        io.to(room).emit('chat message', msg, username);
+        const premium = socket.request.session.account.premium;
+        io.to(room).emit('chat message', msg, username, premium);
     });
 }
 
+// called when drawing on the canvas
 const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -38,6 +44,7 @@ const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     })
 }
 
+// called when clear canvas button is pressed
 const handleClearCanvas = (socket) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -46,6 +53,7 @@ const handleClearCanvas = (socket) => {
     })
 }
 
+// initial setup
 const socketSetup = (app, sessionMiddleware) => {
     const server = http.createServer(app);
     io = new Server(server);
