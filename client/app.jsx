@@ -158,8 +158,10 @@ const handleChatMessage = () => {
 
 const handlePlayGame = (e) => {
     e.preventDefault();
+    helper.hideError();
 
-
+    helper.handleError('not implemented yet!');
+    return false;
 }
 
 // method for changing password
@@ -329,7 +331,9 @@ const MainWindow = (props) => {
 
     return (
         // form for creating room list
-        <form id="channelForm">
+        <form id="channelForm" className='mainForm'>
+            <h2>Choose a Room and Start Drawing!</h2>
+
             <select name="channel" id="channelSelect">
                 <option value="1">Room 1</option>
                 <option value="2">Room 2</option>
@@ -337,7 +341,7 @@ const MainWindow = (props) => {
                 <option value="4">Room 4</option>
                 <option value="5">Room 5</option>
             </select>
-            <input type="submit" value='Join Room' />
+            <input type="submit" className='formSubmit' value='Join Room' />
         </form>
     )
 }
@@ -360,17 +364,19 @@ const CanvasWindow = (props) => {
     canvas.style.display = 'block';
 
     // if premium is not defined yet (happens on first render) or user is not premium
-    if (premium === undefined || premium.premiumStatus === false) {
+    if (premium.premiumStatus === false) {
         return (
             // div for canvasControls
             <div id='controlsDiv'>
                 <div id="colorsDiv">
-                    <button id="green" onClick={() => handleChangeColor("green")}></button>
-                    <button id="blue" onClick={() => handleChangeColor("blue")}></button>
-                    <button id="red" onClick={() => handleChangeColor("red")}></button>
-                    <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
-                    <button id="orange" onClick={() => handleChangeColor("orange")}></button>
-                    <button id="black" onClick={() => handleChangeColor("black")}></button>
+                    <div>
+                        <button id="green" onClick={() => handleChangeColor("green")} style={{ background: `green` }}></button>
+                        <button id="blue" onClick={() => handleChangeColor("blue")} style={{ background: `blue` }}></button>
+                        <button id="red" onClick={() => handleChangeColor("red")} style={{ background: `red` }}></button>
+                        <button id="yellow" onClick={() => handleChangeColor("yellow")} style={{ background: `yellow` }}></button>
+                        <button id="orange" onClick={() => handleChangeColor("orange")} style={{ background: `orange` }}></button>
+                        <button id="black" onClick={() => handleChangeColor("black")} style={{ background: `black` }}></button>
+                    </div>
                 </div>
                 <button id='eraser' onClick={() => {
                     handleChangeColor('white')
@@ -398,12 +404,24 @@ const CanvasWindow = (props) => {
             // div for canvasControls
             <div id='controlsDiv'>
                 <div id="colorsDiv">
-                    <button id="green" onClick={() => handleChangeColor("green")}></button>
-                    <button id="blue" onClick={() => handleChangeColor("blue")}></button>
-                    <button id="red" onClick={() => handleChangeColor("red")}></button>
-                    <button id="yellow" onClick={() => handleChangeColor("yellow")}></button>
-                    <button id="orange" onClick={() => handleChangeColor("orange")}></button>
-                    <button id="black" onClick={() => handleChangeColor("black")}></button>
+                    <div>
+                        <button id="green" onClick={() => handleChangeColor("green")} style={{ background: `green` }}></button>
+                        <button id="blue" onClick={() => handleChangeColor("blue")} style={{ background: `blue` }}></button>
+                        <button id="red" onClick={() => handleChangeColor("red")} style={{ background: `red` }}></button>
+                        <button id="yellow" onClick={() => handleChangeColor("yellow")} style={{ background: `yellow` }}></button>
+                        <button id="orange" onClick={() => handleChangeColor("orange")} style={{ background: `orange` }}></button>
+                        <button id="black" onClick={() => handleChangeColor("black")} style={{ background: `black` }}></button>
+                    </div>
+
+                    <div>
+                        <button id="purple" onClick={() => handleChangeColor("purple")} style={{ background: `purple` }}></button>
+                        <button id="pink" onClick={() => handleChangeColor("pink")} style={{ background: `pink` }}></button>
+                        <button id="gold" onClick={() => handleChangeColor("gold")} style={{ background: `gold` }}></button>
+                        <button id="brown" onClick={() => handleChangeColor("brown")} style={{ background: `brown` }}></button>
+                        <button id="silver" onClick={() => handleChangeColor("silver")} style={{ background: `silver` }}></button>
+                        <button id="grey" onClick={() => handleChangeColor("grey")} style={{ background: `grey` }}></button>
+                    </div>
+
                 </div>
                 <button id='eraser' onClick={() => {
                     handleChangeColor('white')
@@ -445,6 +463,7 @@ const ChatWindow = (props) => {
     )
 }
 
+
 const PlayButton = (props) => {
     return (
         <button id='playButton' onClick={(e) => handlePlayGame(e)}>Play Game</button>
@@ -452,31 +471,70 @@ const PlayButton = (props) => {
 }
 
 const PremiumWindow = (props) => {
-    return (
-        <div id='premiumDiv'>
-            <form id='premiumForm'
-                name='premiumForm'
-                onSubmit={handleBuyPremium}
-                action='/buyPremium'
-                method='POST'
-            >
-                <h2>Would you like to buy Premium?</h2>
-                <h3>It comes with these amazing features:</h3>
-                <ul>
-                    <li>More color options</li>
-                    <li>Shapes to draw with</li>
-                    <li>And More!</li>
-                </ul>
-                <label htmlFor='currpass'>Please enter your password to confirm:</label>
-                <input id='currpass' type='password' name='currpass' placeholder='password' />
-                <input type='submit' value='Confirm' />
-            </form>
+    const [premium, setPremium] = useState(props.premium);
 
-            <form action="/app">
-                <input className='formSubmit' type='submit' value='Go Back' />
-            </form>
-        </div>
-    );
+    // get premium status of current client
+    useEffect(() => {
+        const requestPremiumStatus = async () => {
+            const response = await fetch('/getPremiumStatus');
+            setPremium(await response.json());
+        };
+        requestPremiumStatus();
+    }, '');
+
+
+    if (premium.premiumStatus === false) {
+        return (
+            <div id='premiumDiv'>
+                <form id='premiumForm'
+                    name='premiumForm'
+                    onSubmit={handleBuyPremium}
+                    action='/buyPremium'
+                    method='POST'
+                    className='mainForm'
+                >
+                    <h2>Would you like to buy Premium?</h2>
+                    <h3>It comes with these amazing features:</h3>
+                    <ul>
+                        <li>More color options</li>
+                        <li>Shapes to draw with</li>
+                        <li>And More!</li>
+                    </ul>
+                    <label htmlFor='currpass'>Please enter your password to confirm:</label>
+                    <input id='currpass' type='password' name='currpass' placeholder='password' />
+                    <input className='formSubmit' type='submit' value='Confirm' />
+                </form>
+
+                <form action="/app">
+                    <input className='formSubmit' type='submit' value='Go Back' />
+                </form>
+            </div>
+        );
+    }
+    else {
+        return (
+            <div id='premiumDiv'>
+                <form id='premiumForm'
+                    name='premiumForm'
+                    action='/app'
+                    className='mainForm'
+                >
+                    <h2>You already have Premium!</h2>
+                    <h3>you get these amazing features:</h3>
+                    <ul>
+                        <li>More color options</li>
+                        <li>Shapes to draw with</li>
+                        <li>And More!</li>
+                    </ul>
+                    <input className='formSubmit' type='submit' value='Confirm' />
+                </form>
+
+                <form action="/app">
+                    <input className='formSubmit' type='submit' value='Go Back' />
+                </form>
+            </div>
+        );
+    }
 }
 
 
@@ -508,7 +566,7 @@ const init = () => {
         }
 
         ReactDOM.render(
-            <PremiumWindow premium='false' />,
+            <PremiumWindow premium={{ "premiumStatus": false }} />,
             document.getElementById('app')
         );
     });
@@ -526,7 +584,7 @@ const init = () => {
         const channelSelect = document.getElementById('channelSelect');
 
         ReactDOM.render(
-            <CanvasWindow />,
+            <CanvasWindow premium={{ "premiumStatus": false }} />,
             document.getElementById('canvasControls')
         );
         ReactDOM.render(
@@ -554,4 +612,3 @@ const init = () => {
 }
 
 window.onload = init;
-// window.onresize = changeCanvasSize;

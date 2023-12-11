@@ -1,6 +1,7 @@
 const handleError = (message) => {
     document.getElementById('errorMessage').textContent = message;
     document.getElementById('errorDiv').classList.remove('hidden');
+    document.getElementById('hide').addEventListener(('click'), () => { document.getElementById('errorDiv').classList.add('hidden'); });
 };
 
 

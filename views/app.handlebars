@@ -20,9 +20,10 @@
   <section id="app">
     <section id="users" hidden></section>
     <div id="canvasDiv">
+      <section id="canvasControls"></section>
       <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #000000;" hidden>
       </canvas>
-      <section id="canvasControls"></section>
+      <section id="saveControls"></section>
     </div>
     <section id="userControls"></section>
   </section>
@@ -30,8 +31,8 @@
   <section id="playControls"></section>
 
   <div id="errorDiv" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box" />
     <h3><span id="errorMessage"></span></h3>
+    <input type="submit" id="hide" class="formSubmit" value="OK" />
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
