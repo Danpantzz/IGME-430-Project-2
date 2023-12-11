@@ -35,6 +35,14 @@ const handleChatMessage = (socket, msg, username) => {
     });
 }
 
+const handleDot = (socket, currX, currY, x, y) => {
+    socket.rooms.forEach(room => {
+        if (room === socket.id) return;
+
+        io.to(room).emit('dot', currX, currY, x, y);
+    })
+}
+
 // called when drawing on the canvas
 const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
@@ -95,6 +103,7 @@ const socketSetup = (app, sessionMiddleware) => {
 
         socket.on('room selected', (room) => handleRoomChange(socket, room, username));
         socket.on('chat message', (msg) => handleChatMessage(socket, msg, username));
+        socket.on('dot', (currX, currY, x, y) => handleDot(socket, currX, currY, x, y));
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
         socket.on('clear canvas', () => handleClearCanvas(socket));
     });

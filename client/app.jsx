@@ -17,7 +17,6 @@ var x = "black",
 
 // method for drawing on canvas and sending to socket.io
 const handleDraw = (c, e) => {
-    // send data to socket so all users see the drawing
     ctx = canvas.getContext('2d');
 
     var flag = false,
@@ -46,9 +45,11 @@ const handleDraw = (c, e) => {
             if (dot_flag) {
                 ctx.beginPath();
                 ctx.fillStyle = x;
-                ctx.fillRect(currX, currY, 2, 2);
+                ctx.fillRect(currX, currY, y, y);
                 ctx.closePath();
                 dot_flag = false;
+
+                socket.emit('dot', currX, currY, x, y);
             }
         }
         if (res == 'up' || res == "out") {
@@ -83,6 +84,7 @@ const handleDraw = (c, e) => {
         ctx.closePath();
         ctx.restore();
 
+        // send data to socket so all users see the drawing
         socket.emit('draw', prevX, prevY, currX, currY, x, y);
     }
 
@@ -102,6 +104,7 @@ const handleDraw = (c, e) => {
 
     // touch events
     canvas.addEventListener("touchmove", function (e) {
+        e.preventDefault();
         findxy('move', ctx, e)
     }, false);
     canvas.addEventListener("touchstart", function (e) {
@@ -117,6 +120,7 @@ const handleChangeColor = (color) => {
     x = color;
 }
 
+// method for changing width size
 const handleChangeWidth = (width) => {
     y = width;
 }
@@ -225,8 +229,11 @@ const displayRoomSize = (userArray) => {
 
         userElement.id = 'userItem'
         userElement.innerHTML = `${user.username}`;
+
+        // change username color if user is premium
         if (user.premium) {
-            userElement.style.color = '#dba21d';
+            userElement.style.color = 'white';
+            userElement.style.textShadow = '#E80 2px 0 7px';
         }
         usersContainer.appendChild(userElement);
     })
@@ -235,8 +242,17 @@ const displayRoomSize = (userArray) => {
 }
 
 // display drawing to all users in channel
+const displayDot = (_currX, _currY, _x, _y) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = _x;
+    ctx.fillRect(_currX, _currY, _y, _y);
+    ctx.closePath();
+    ctx.restore();
+}
+
+// display drawing to all users in channel
 const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
-    // display the drawing to users who are not the ones drawing (because it is already there for them)
     ctx.save()
     ctx.beginPath();
     ctx.moveTo(_prevX, _prevY);
@@ -494,6 +510,7 @@ const init = () => {
     socket.on('update room size', displayRoomSize);
     socket.on('joined or left', displayJoinOrLeftMessage);
     socket.on('chat message', displayMessage);
+    socket.on('dot', displayDot);
     socket.on('draw', displayDrawing);
     socket.on('clear canvas', clearCanvas);
 

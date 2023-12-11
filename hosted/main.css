@@ -77,12 +77,10 @@ body {
   overflow-y: auto;
 }
 #app #users #usersContainer #userItem {
+  background-color: #c7dae8;
   padding: 1em;
   border-bottom: 1px solid black;
   border-top: 1px solid black;
-}
-#app #users #usersContainer #userItem:nth-child(odd) {
-  background-color: #c7dae8;
 }
 #app #canvasDiv {
   display: flex;
