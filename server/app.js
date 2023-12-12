@@ -39,6 +39,7 @@ redisClient.connect().then(() => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
+  // storing session in variable to use with socket.io
   const sessionMiddleware = session({
     key: 'sessionid',
     store: new RedisStore({
