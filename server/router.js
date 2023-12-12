@@ -16,6 +16,8 @@ const router = (app) => {
   app.get('/getPremiumStatus', mid.requiresLogin, controllers.Account.getPremiumStatus);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/*', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
 };
 
 module.exports = router;

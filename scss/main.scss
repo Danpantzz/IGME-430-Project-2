@@ -281,19 +281,8 @@ body {
         width: 8em;
         height: 3em;
         font-size: 2em;
-        background-color: lightblue;
-
-        &:hover {
-            background-color: #66bdff;
-        }
-
-        &:active {
-            background-color: rgb(50, 183, 228);
-        }
-
+        border-radius: 20px;
     }
-
-
 }
 
 nav {

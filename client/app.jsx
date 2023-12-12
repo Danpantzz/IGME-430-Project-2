@@ -506,7 +506,7 @@ const ChatWindow = (props) => {
 // renders play button and sets up onClick event (not implemented)
 const PlayButton = (props) => {
     return (
-        <button id='playButton' onClick={(e) => handlePlayGame(e)}>Guess the Drawing!</button>
+        <button id='playButton' className="formSubmit" onClick={(e) => handlePlayGame(e)}>Play: Guess the Drawing!</button>
     )
 }
 

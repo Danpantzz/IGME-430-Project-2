@@ -214,13 +214,7 @@ body {
   width: 8em;
   height: 3em;
   font-size: 2em;
-  background-color: lightblue;
-}
-#playControls button:hover {
-  background-color: #66bdff;
-}
-#playControls button:active {
-  background-color: rgb(50, 183, 228);
+  border-radius: 20px;
 }
 
 nav {
