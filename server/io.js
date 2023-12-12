@@ -97,7 +97,9 @@ const socketSetup = (app, sessionMiddleware) => {
                 const userArray = [];
                 sockets.forEach(thisSocket => {
                     if (thisSocket === socket) { return; }
-                    userArray.push(thisSocket.request.session.account.username);
+                    const thisUsername = thisSocket.request.session.account.username;
+                    const premium = thisSocket.request.session.account.premium;
+                    userArray.push({ "username": thisUsername, "premium": premium });
                 });
 
                 io.to(room).emit('update room size', userArray);
