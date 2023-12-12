@@ -165,7 +165,7 @@ const handleChatMessage = () => {
 }
 
 // originally would have handled starting the gameplay loop, disabling the canvas for non-host players, and displaying
-// the word to draw to the host/current drawer
+// the word to draw to the host/current player drawing
 const handlePlayGame = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -234,13 +234,15 @@ const handleSave = (e) => {
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
 
 // display joined/left message to room
-const displayJoinOrLeftMessage = (msg, username) => {
+const displayJoinOrLeftMessage = (msg, username, premium) => {
     const messageDiv = document.createElement('div');
     messageDiv.id = 'joinedOrLeft';
 
     const messages = document.getElementById('messages');
 
-    messageDiv.innerHTML = `<i><b>${username} ${msg}</b></i>`;
+    // style the username differently if the user has premium
+    if (premium) messageDiv.innerHTML = `<i><b style="color:white; text-shadow: #000 2px 1px 3px, #E80 3px 0 10px">${username}</b> <b>${msg}</b></i>`;
+    else messageDiv.innerHTML = `<i><b>${username} ${msg}</b></i>`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
 }
@@ -250,8 +252,9 @@ const displayMessage = (msg, username, premium) => {
     const messageDiv = document.createElement('div');
     const messages = document.getElementById('messages');
 
-    if (premium) messageDiv.innerHTML = `<b style="color:gold">${username}:</b> ${msg}`;
-    messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
+    // style the username differently if the user has premium
+    if (premium) messageDiv.innerHTML = `<b style="color:white; text-shadow: #000 2px 1px 3px, #E80 3px 0 10px">${username}:</b> ${msg}`;
+    else messageDiv.innerHTML = `<b>${username}:</b> ${msg}`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
 }
@@ -283,7 +286,7 @@ const displayRoomSize = (userArray) => {
 
 }
 
-// display drawing to all users in channel
+// display dot to all users in channel
 const displayDot = (_currX, _currY, _x, _y) => {
     ctx.save();
     ctx.beginPath();
@@ -306,6 +309,7 @@ const displayDrawing = (_prevX, _prevY, _currX, _currY, _x, _y) => {
     ctx.restore();
 }
 
+// display circle to all users in channel
 const displayCircle = (_currX, _currY, _x, _y) => {
     ctx.save();
     ctx.beginPath();
@@ -350,7 +354,7 @@ const ChangePasswordWindow = (props) => {
     );
 }
 
-// window for choosing room to join and avatar
+// window for choosing room to join
 const MainWindow = (props) => {
     ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -373,7 +377,7 @@ const MainWindow = (props) => {
     )
 }
 
-// window for playing the game
+// window for drawing on the canvas
 const CanvasWindow = (props) => {
     const [premium, setPremium] = useState(props.premium);
 
@@ -390,7 +394,7 @@ const CanvasWindow = (props) => {
 
     canvas.style.display = 'block';
 
-    // if premium is not defined yet (happens on first render) or user is not premium
+    // if user is not premium
     if (premium.premiumStatus === false) {
         return (
             // div for canvasControls
@@ -499,10 +503,10 @@ const ChatWindow = (props) => {
     )
 }
 
-// renders play button and sets up onClick event
+// renders play button and sets up onClick event (not implemented)
 const PlayButton = (props) => {
     return (
-        <button id='playButton' onClick={(e) => handlePlayGame(e)}>Play Game</button>
+        <button id='playButton' onClick={(e) => handlePlayGame(e)}>Guess the Drawing!</button>
     )
 }
 
@@ -561,7 +565,8 @@ const PremiumWindow = (props) => {
                     <ul>
                         <li>More color options</li>
                         <li>Shapes to draw with</li>
-                        <li>And More!</li>
+                        <li>Save image option</li>
+                        <li>different color username</li>
                     </ul>
                     <input className='formSubmit' type='submit' value='Confirm' />
                 </form>
@@ -580,6 +585,7 @@ const init = () => {
     const changePasswordButton = document.getElementById('changePassword');
     const premiumButton = document.getElementById('buyPremium');
 
+    // event listener for clicking on change password
     changePasswordButton.addEventListener('click', (e) => {
         e.preventDefault();
         if (document.getElementById('channelForm')) {
@@ -590,7 +596,7 @@ const init = () => {
             document.getElementById('users').style.display = 'none';
             document.getElementById('controlsDiv').style.display = 'none';
             document.getElementById('chatForm').style.display = 'none';
-            //document.getElementById('playButton').style.display = 'none';
+            document.getElementById('playButton').style.display = 'none';
         }
         ReactDOM.render(
             <ChangePasswordWindow />,
@@ -598,6 +604,7 @@ const init = () => {
         return false;
     });
 
+    // event listener for clicking on premium button
     premiumButton.addEventListener('click', (e) => {
         e.preventDefault();
         if (document.getElementById('channelForm')) {
@@ -608,7 +615,7 @@ const init = () => {
             document.getElementById('users').style.display = 'none';
             document.getElementById('controlsDiv').style.display = 'none';
             document.getElementById('chatForm').style.display = 'none';
-            //document.getElementById('playButton').style.display = 'none';
+            document.getElementById('playButton').style.display = 'none';
         }
 
         ReactDOM.render(
@@ -617,13 +624,16 @@ const init = () => {
         );
     });
 
+    // render main window after everything is set up
     ReactDOM.render(
         <MainWindow />,
         document.getElementById('userControls')
     );
 
+    // after main window exists, get channel form
     const channelForm = document.getElementById('channelForm');
 
+    // event listener for choosing a room to join
     channelForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -640,15 +650,22 @@ const init = () => {
             <ChatWindow />,
             document.getElementById('userControls')
         );
-        // ReactDOM.render(
-        //     <PlayButton />,
-        //     document.getElementById('playControls')
-        // );
+
+        // rendering play button
+        ReactDOM.render(
+            <PlayButton />,
+            document.getElementById('playControls')
+        );
+
+        // emit to socket the room selected so user can join
         socket.emit('room selected', channelSelect.value);
+
+        // set up chat messaging functionality
         handleChatMessage();
     });
 
 
+    // set up drawing handler and socket handlers
     handleDraw();
     socket.on('update room size', displayRoomSize);
     socket.on('joined or left', displayJoinOrLeftMessage);

@@ -11,7 +11,8 @@ const handleRoomChange = async (socket, roomName, username) => {
     });
     socket.join(roomName);
 
-    io.to(roomName).emit('joined or left', 'has joined!', username);
+    // send message to everyone in the same room that someone joined
+    io.to(roomName).emit('joined or left', 'has joined!', username, socket.request.session.account.premium);
 
     const sockets = await io.in(roomName).fetchSockets();
     const userArray = [];
@@ -21,6 +22,7 @@ const handleRoomChange = async (socket, roomName, username) => {
         userArray.push({ "username": thisUsername, "premium": premium });
     })
 
+    // update room list to display all users in the room
     io.to(roomName).emit('update room size', userArray);
 
 }
@@ -35,6 +37,7 @@ const handleChatMessage = (socket, msg, username) => {
     });
 }
 
+// called when just clicking on the canvas
 const handleDot = (socket, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -52,6 +55,7 @@ const handleDraw = (socket, prevX, prevY, currX, currY, x, y) => {
     })
 }
 
+// called when drawing a circle on the canvas
 const handleCircle = (socket, currX, currY, x, y) => {
     socket.rooms.forEach(room => {
         if (room === socket.id) return;
@@ -89,8 +93,11 @@ const socketSetup = (app, sessionMiddleware) => {
                 // get the room this socket is in
                 const room = Array.from(socket.rooms)[1];
 
+                // get whether or not this user has premium
+                const premium = socket.request.session.account.premium
+
                 // tell room they left
-                io.to(room).emit('joined or left', 'has left!', username);
+                io.to(room).emit('joined or left', 'has left!', username, premium);
 
                 // update list of users in that room
                 const sockets = await io.in(room).fetchSockets();
@@ -98,8 +105,8 @@ const socketSetup = (app, sessionMiddleware) => {
                 sockets.forEach(thisSocket => {
                     if (thisSocket === socket) { return; }
                     const thisUsername = thisSocket.request.session.account.username;
-                    const premium = thisSocket.request.session.account.premium;
-                    userArray.push({ "username": thisUsername, "premium": premium });
+                    const thisPremium = thisSocket.request.session.account.premium;
+                    userArray.push({ "username": thisUsername, "premium": thisPremium });
                 });
 
                 io.to(room).emit('update room size', userArray);

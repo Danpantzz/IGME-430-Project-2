@@ -9,6 +9,7 @@ const logout = (req, res) => {
   return res.redirect('/');
 };
 
+// handle logging in
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -28,6 +29,7 @@ const login = (req, res) => {
   });
 };
 
+// handle signing up
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -56,6 +58,7 @@ const signup = async (req, res) => {
   }
 };
 
+// handle changing password
 const changePassword = async (req, res) => {
   const username = `${req.session.account.username}`;
   const currpass = `${req.body.currpass}`;
@@ -88,6 +91,7 @@ const changePassword = async (req, res) => {
   });
 };
 
+// handle buying premium
 const buyPremium = async (req, res) => {
   console.log(`${req.session.account.username} buying premium`);
   const username = `${req.session.account.username}`;
@@ -110,6 +114,7 @@ const buyPremium = async (req, res) => {
   });
 }
 
+// get premium status of client
 const getPremiumStatus = async (req, res) => {
   const premiumStatus = req.session.account.premium;
   console.log(`premium status: ${premiumStatus}`);
