@@ -181,6 +181,19 @@ body {
         }
     }
 
+    #saveControls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1em;
+        div {
+            button {
+                height: 3em;
+                width: 6em;
+            }
+        }
+    }
+
     #userControls {
         //display: flex;
         //align-items: center;

@@ -135,6 +135,16 @@ body {
 #app #canvasControls #controlsDiv #colorsDiv button {
   height: 20px;
 }
+#app #saveControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+}
+#app #saveControls div button {
+  height: 3em;
+  width: 6em;
+}
 #app #userControls #channelForm {
   text-align: center;
   padding-top: 1em;

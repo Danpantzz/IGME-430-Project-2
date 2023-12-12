@@ -156,11 +156,13 @@ const handleChatMessage = () => {
     })
 }
 
+// originally would have handled starting the gameplay loop, disabling the canvas for non-host players, and displaying
+// the word to draw to the host/current drawer
 const handlePlayGame = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    helper.handleError('not implemented yet!');
+    helper.handleError('Feature not implemented yet!');
     return false;
 }
 
@@ -189,6 +191,7 @@ const handleChangePassword = (e) => {
     return false;
 }
 
+// sends post request to server to change status of premium to 'true'
 const handleBuyPremium = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -202,6 +205,22 @@ const handleBuyPremium = (e) => {
 
     helper.sendPost(e.target.action, { password });
     return false;
+}
+
+// save canvas to user device
+// https://fjolt.com/article/html-canvas-save-as-image
+const handleSave = (e) => {
+    e.preventDefault();
+
+    let canvasUrl = canvas.toDataURL();
+
+    const createEl = document.createElement('a');
+    createEl.href = canvasUrl;
+
+    createEl.download = "my-canvas";
+
+    createEl.click();
+    createEl.remove();
 }
 
 // Socket.io displays/methods ~~~~~~~~~~~~~~~~~~~~
@@ -450,26 +469,35 @@ const CanvasWindow = (props) => {
     }
 }
 
+const SaveControls = (props) => {
+    return (
+        <div id='saveDiv'>
+            <button onClick={handleSave}>Save as PNG</button>
+        </div>
+    );
+}
+
 // window for the chat room
 const ChatWindow = (props) => {
     return (
         <form id="chatForm">
             <div id="messages"></div>
             <div id='formElements'>
-                <input id="editBox" type="text" placeholder='Type your guess here...' />
+                <input id="editBox" type="text" placeholder='Type here...' />
                 <input type="submit" />
             </div>
         </form>
     )
 }
 
-
+// renders play button and sets up onClick event
 const PlayButton = (props) => {
     return (
         <button id='playButton' onClick={(e) => handlePlayGame(e)}>Play Game</button>
     )
 }
 
+// window for purchasing premium
 const PremiumWindow = (props) => {
     const [premium, setPremium] = useState(props.premium);
 
@@ -583,10 +611,18 @@ const init = () => {
 
         const channelSelect = document.getElementById('channelSelect');
 
+        // rendering canvas controls
         ReactDOM.render(
             <CanvasWindow premium={{ "premiumStatus": false }} />,
             document.getElementById('canvasControls')
         );
+
+        ReactDOM.render(
+            <SaveControls />,
+            document.getElementById('saveControls')
+        );
+
+        // rendering chat message box
         ReactDOM.render(
             <ChatWindow />,
             document.getElementById('userControls')
