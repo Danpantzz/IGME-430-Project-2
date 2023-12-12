@@ -5,7 +5,6 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    //overflow-y: auto;
     background-color: rgb(52, 67, 82);
 }
 
@@ -110,8 +109,6 @@ body {
         background-color: lightblue;
 
         #usersContainer {
-            //display: flex;
-            //flex-direction: column;
             border: 1px solid black;
             background-color: white;
             width: 100%;
@@ -119,17 +116,10 @@ body {
             overflow-y: auto;
 
             #userItem {
-                //text-align: left;
-                //padding-left: 1em;
-                //padding-top: 1em;
                 background-color: #c7dae8;
                 padding: 1em;
                 border-bottom: 1px solid black;
                 border-top: 1px solid black;
-
-                // &:nth-child(odd) {
-                //     background-color: #c7dae8;
-                // }
             }
         }
     }
@@ -139,9 +129,6 @@ body {
         flex-direction: column;
 
         #canvasControls {
-            //display: flex;
-            //border: 1px solid black;
-
             #controlsDiv {
                 background-color: lightblue;
                 padding: .5em;
@@ -152,10 +139,7 @@ body {
                 justify-content: center;
                 gap: 1em;
 
-
-                // Temporary styles
                 #clear {
-                    //position: absolute;
                     top: 15%;
                     left: 48%;
                 }
@@ -171,7 +155,6 @@ body {
 
                     div {
                         display: flex;
-                        //align-items: stretch;
                         gap: 1em;
                     }
 
@@ -205,10 +188,6 @@ body {
     }
 
     #userControls {
-        //display: flex;
-        //align-items: center;
-        //justify-content: center;
-
         #channelForm {
             text-align: center;
             padding-top: 1em;
@@ -218,7 +197,6 @@ body {
             }
 
             select {
-                //height: 1em;
                 font-size: 1.5em;
             }
         }
@@ -228,7 +206,6 @@ body {
             flex-direction: column;
             align-items: start;
             justify-content: end;
-            //overflow-y: auto;
             border: 1px solid #000000;
             width: 18em;
             height: 65%;
@@ -248,9 +225,6 @@ body {
                     padding: 2px;
 
                     &:nth-child(even) {
-                        //margin: 1px;
-                        //border: 1px solid black;
-                        //background-color: #b7c9e2;
                         background-color: #c7dae8;
                     }
                 }
@@ -357,21 +331,21 @@ nav {
 }
 
 #errorDiv {
+    position: absolute;
     top: 40%;
-    right: 20%;
+    right: 43%;
     width: 240px;
     height: 180px;
-    position: absolute;
-    overflow: hidden;
+    overflow-y: auto;
     background-color: white;
     border: 2px solid black;
     border-radius: 10px;
 
     h3 {
-        width: 200px;
         position: absolute;
         left: 20px;
         bottom: 50px;
+        width: 200px;
         text-align: center;
     }
 
