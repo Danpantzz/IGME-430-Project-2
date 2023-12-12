@@ -64,6 +64,14 @@ const handleDraw = (c, e) => {
 
                 socket.emit('circle', currX, currY, x, y);
             }
+            if (square) {
+                ctx.beginPath();
+                ctx.fillStyle = x;
+                ctx.fillRect(currX, currY, y * 3, y * 3);
+                ctx.closePath();
+
+                socket.emit('dot', currX, currY, x, y * 3);
+            }
         }
         if (res == 'up' || res == "out") {
             flag = false;
