@@ -5,12 +5,29 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
+    //overflow-y: auto;
     background-color: rgb(52, 67, 82);
 }
 
 #titleContainer {
     text-align: center;
     margin: 1em;
+
+    img {
+        // https://stackoverflow.com/questions/4684304/how-can-i-resize-an-image-dynamically-with-css-as-the-browser-width-height-chang
+        max-width: 100%;
+        height: auto;
+    }
+
+    h1 {
+        background-color: lightblue;
+        width: fit-content;
+        margin: 1em auto;
+        text-align: center;
+        padding: .5em;
+        border: 2px solid black;
+        border-radius: 5px;
+    }
 }
 
 .mainForm {
@@ -84,7 +101,6 @@ body {
     align-items: center;
     justify-content: center;
     gap: 1em;
-    //overflow: auto;
 
     #users {
         width: 15%;
@@ -122,62 +138,55 @@ body {
         display: flex;
         flex-direction: column;
 
-        // https://stackoverflow.com/questions/1152203/centering-a-canvas
+        #canvasControls {
+            //display: flex;
+            //border: 1px solid black;
+
+            #controlsDiv {
+                background-color: lightblue;
+                padding: .5em;
+                border: solid black;
+                border-width: 1px 1px 0px 1px;
+                display: flex;
+                align-items: stretch;
+                justify-content: center;
+                gap: 1em;
+
+
+                // Temporary styles
+                #clear {
+                    //position: absolute;
+                    top: 15%;
+                    left: 48%;
+                }
+
+                #colorsDiv {
+                    display: flex;
+                    flex-direction: column;
+                    height: 20px;
+                    align-items: stretch;
+                    gap: 1em;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+
+                    div {
+                        display: flex;
+                        //align-items: stretch;
+                        gap: 1em;
+                    }
+
+                    button {
+                        height: 20px;
+                    }
+                }
+
+                #shapesDiv {}
+            }
+        }
+
         #myCanvas {
-            //position: absolute;
-            //top: 0;
-            //bottom: 0;
-            //left: 0;
-            //right: 0;
             margin: auto;
             background-color: white;
-            // border:1px solid #000000;
-        }
-    }
-
-    #canvasControls {
-        //display: flex;
-        //border: 1px solid black;
-
-        #controlsDiv {
-            background-color: lightblue;
-            padding: .5em;
-            border: solid black;
-            border-width: 1px 1px 0px 1px;
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            gap: 1em;
-
-
-            // Temporary styles
-            #clear {
-                //position: absolute;
-                top: 15%;
-                left: 48%;
-            }
-
-            #colorsDiv {
-                display: flex;
-                flex-direction: column;
-                height: 20px;
-                align-items: stretch;
-                gap: 1em;
-                overflow-x: hidden;
-                overflow-y: auto;
-
-                div {
-                    display: flex;
-                    //align-items: stretch;
-                    gap: 1em;
-                }
-
-                button {
-                    height: 20px;
-                }
-            }
-
-            #shapesDiv {}
         }
     }
 
@@ -186,6 +195,7 @@ body {
         align-items: center;
         justify-content: center;
         margin-top: 1em;
+
         div {
             button {
                 height: 3em;
@@ -293,11 +303,23 @@ nav {
 
     #logo {
         height: 40px;
-        width: 40;
+        width: 40px;
         padding-top: 5px;
         padding-left: 15px;
         float: left;
     }
+
+    #navTitle {
+        height: 40px;
+        width: 200px;
+        padding-top: 10px;
+        padding-left: 15px;
+        float: left;
+        align-self: end;
+        margin: 0;
+        color: black;
+    }
+
 
     .navlink {
         padding: 5px;

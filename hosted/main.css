@@ -10,6 +10,19 @@ body {
   text-align: center;
   margin: 1em;
 }
+#titleContainer img {
+  max-width: 100%;
+  height: auto;
+}
+#titleContainer h1 {
+  background-color: lightblue;
+  width: fit-content;
+  margin: 1em auto;
+  text-align: center;
+  padding: 0.5em;
+  border: 2px solid black;
+  border-radius: 5px;
+}
 
 .mainForm {
   width: 15em;
@@ -101,11 +114,7 @@ body {
   display: flex;
   flex-direction: column;
 }
-#app #canvasDiv #myCanvas {
-  margin: auto;
-  background-color: white;
-}
-#app #canvasControls #controlsDiv {
+#app #canvasDiv #canvasControls #controlsDiv {
   background-color: lightblue;
   padding: 0.5em;
   border: solid black;
@@ -115,11 +124,11 @@ body {
   justify-content: center;
   gap: 1em;
 }
-#app #canvasControls #controlsDiv #clear {
+#app #canvasDiv #canvasControls #controlsDiv #clear {
   top: 15%;
   left: 48%;
 }
-#app #canvasControls #controlsDiv #colorsDiv {
+#app #canvasDiv #canvasControls #controlsDiv #colorsDiv {
   display: flex;
   flex-direction: column;
   height: 20px;
@@ -128,12 +137,16 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
-#app #canvasControls #controlsDiv #colorsDiv div {
+#app #canvasDiv #canvasControls #controlsDiv #colorsDiv div {
   display: flex;
   gap: 1em;
 }
-#app #canvasControls #controlsDiv #colorsDiv button {
+#app #canvasDiv #canvasControls #controlsDiv #colorsDiv button {
   height: 20px;
+}
+#app #canvasDiv #myCanvas {
+  margin: auto;
+  background-color: white;
 }
 #app #saveControls {
   display: flex;
@@ -217,10 +230,20 @@ nav {
 }
 nav #logo {
   height: 40px;
-  width: 40;
+  width: 40px;
   padding-top: 5px;
   padding-left: 15px;
   float: left;
+}
+nav #navTitle {
+  height: 40px;
+  width: 200px;
+  padding-top: 10px;
+  padding-left: 15px;
+  float: left;
+  align-self: end;
+  margin: 0;
+  color: black;
 }
 nav .navlink {
   padding: 5px;

@@ -412,6 +412,9 @@ const CanvasWindow = (props) => {
                     <option value='10'>width 10</option>
                     <option value='12'>width 12</option>
                     <option value='14'>width 14</option>
+                    <option value='16'>width 16</option>
+                    <option value='18'>width 18</option>
+                    <option value='20'>width 20</option>
                 </select>
             </div>
         )
@@ -457,11 +460,14 @@ const CanvasWindow = (props) => {
                     <option value='10'>width 10</option>
                     <option value='12'>width 12</option>
                     <option value='14'>width 14</option>
+                    <option value='16'>width 16</option>
+                    <option value='18'>width 18</option>
+                    <option value='20'>width 20</option>
                 </select>
                 <div id='shapesDiv'>
                     <button id='line' onClick={() => { line = true; circle = false; square = false; }}>Line</button>
                     <button id='circle' onClick={() => { line = false; circle = true; square = false; }}>Circle</button>
-                    {/* <button id='square' onClick={() => { line = false; circle = false; square = true; }}>Square</button> */}
+                    <button id='square' onClick={() => { line = false; circle = false; square = true; }}>Square</button>
                 </div>
                 <div id='saveDiv'>
                     <button onClick={handleSave}>Save as PNG</button>
@@ -568,7 +574,16 @@ const init = () => {
 
     changePasswordButton.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('channelForm').style.display = 'none';
+        if (document.getElementById('channelForm')) {
+            document.getElementById('channelForm').style.display = 'none';
+        }
+        else {
+            canvas.style.display = 'none';
+            document.getElementById('users').style.display = 'none';
+            document.getElementById('controlsDiv').style.display = 'none';
+            document.getElementById('chatForm').style.display = 'none';
+            //document.getElementById('playButton').style.display = 'none';
+        }
         ReactDOM.render(
             <ChangePasswordWindow />,
             document.getElementById('userControls'));
@@ -585,7 +600,7 @@ const init = () => {
             document.getElementById('users').style.display = 'none';
             document.getElementById('controlsDiv').style.display = 'none';
             document.getElementById('chatForm').style.display = 'none';
-            document.getElementById('playButton').style.display = 'none';
+            //document.getElementById('playButton').style.display = 'none';
         }
 
         ReactDOM.render(
@@ -617,10 +632,10 @@ const init = () => {
             <ChatWindow />,
             document.getElementById('userControls')
         );
-        ReactDOM.render(
-            <PlayButton />,
-            document.getElementById('playControls')
-        );
+        // ReactDOM.render(
+        //     <PlayButton />,
+        //     document.getElementById('playControls')
+        // );
         socket.emit('room selected', channelSelect.value);
         handleChatMessage();
     });
