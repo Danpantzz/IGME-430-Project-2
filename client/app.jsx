@@ -437,8 +437,8 @@ const CanvasWindow = (props) => {
                         <button id="pink" onClick={() => handleChangeColor("pink")} style={{ background: `pink` }}></button>
                         <button id="gold" onClick={() => handleChangeColor("gold")} style={{ background: `gold` }}></button>
                         <button id="brown" onClick={() => handleChangeColor("brown")} style={{ background: `brown` }}></button>
+                        <button id="teal" onClick={() => handleChangeColor("teal")} style={{ background: `teal` }}></button>
                         <button id="silver" onClick={() => handleChangeColor("silver")} style={{ background: `silver` }}></button>
-                        <button id="grey" onClick={() => handleChangeColor("grey")} style={{ background: `grey` }}></button>
                     </div>
 
                 </div>
@@ -463,18 +463,13 @@ const CanvasWindow = (props) => {
                     <button id='circle' onClick={() => { line = false; circle = true; square = false; }}>Circle</button>
                     {/* <button id='square' onClick={() => { line = false; circle = false; square = true; }}>Square</button> */}
                 </div>
-            </div >
+                <div id='saveDiv'>
+                    <button onClick={handleSave}>Save as PNG</button>
+                </div>
+            </div>
         )
 
     }
-}
-
-const SaveControls = (props) => {
-    return (
-        <div id='saveDiv'>
-            <button onClick={handleSave}>Save as PNG</button>
-        </div>
-    );
 }
 
 // window for the chat room
@@ -615,11 +610,6 @@ const init = () => {
         ReactDOM.render(
             <CanvasWindow premium={{ "premiumStatus": false }} />,
             document.getElementById('canvasControls')
-        );
-
-        ReactDOM.render(
-            <SaveControls />,
-            document.getElementById('saveControls')
         );
 
         // rendering chat message box
