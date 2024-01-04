@@ -168,10 +168,12 @@ const handleChatMessage = () => {
 // the word to draw to the host/current player drawing
 const handlePlayGame = (e) => {
     e.preventDefault();
-    helper.hideError();
+    // helper.hideError();
 
-    helper.handleError('Feature not implemented yet!');
-    return false;
+    // helper.handleError('Feature not implemented yet!');
+    // return false;
+
+    socket.emit('play');
 }
 
 // method for changing password

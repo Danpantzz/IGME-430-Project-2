@@ -124,6 +124,10 @@ const socketSetup = (app, sessionMiddleware) => {
         socket.on('draw', (prevX, prevY, currX, currY, x, y) => handleDraw(socket, prevX, prevY, currX, currY, x, y));
         socket.on('circle', (currX, currY, x, y) => handleCircle(socket, currX, currY, x, y));
         socket.on('clear canvas', () => handleClearCanvas(socket));
+
+        socket.on('play', () => {
+
+        });
     });
 
     return server;
